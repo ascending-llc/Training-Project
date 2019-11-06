@@ -10,7 +10,9 @@ package com.ascending.training.repository;
 import com.ascending.training.model.User;
 
 public interface UserDao {
-    boolean save(User user);
+    User save(User user);
+    User findById(Long Id);
     User getUserByEmail(String email);
     User getUserByCredentials(String email, String password);
+    void delete(User u);
 }

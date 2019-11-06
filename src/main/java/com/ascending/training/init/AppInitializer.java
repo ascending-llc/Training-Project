@@ -7,6 +7,9 @@
 
 package com.ascending.training.init;
 
+import com.ascending.training.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -54,6 +57,13 @@ import org.springframework.context.annotation.Scope;
 public class AppInitializer {
     public static void main(String[] args) {
         SpringApplication.run(AppInitializer.class, args);
+    }
+
+    @Bean
+    public SessionFactory getFactory() throws Exception {
+        SessionFactory sf = HibernateUtil.getSessionFactory();;
+        if(sf==null) throw new Exception("building session factory exception");
+        return sf;
     }
 
     @Bean

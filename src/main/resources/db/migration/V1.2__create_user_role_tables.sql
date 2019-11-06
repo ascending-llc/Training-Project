@@ -25,10 +25,10 @@ CREATE TABLE role (
     id                   SERIAL NOT NULL,
     name                 VARCHAR(30) not null unique,
     allowed_resource     VARCHAR(200),
-    allowed_read         VARCHAR(1) not null default 'N',
-    allowed_create       VARCHAR(1) not null default 'N',
-    allowed_update       VARCHAR(1) not null default 'N',
-    allowed_delete       VARCHAR(1) not null default 'N'
+    allowed_read         boolean not null default false,
+    allowed_create       boolean not null default false,
+    allowed_update       boolean not null default false,
+    allowed_delete       boolean not null default false
 );
 
 ALTER TABLE role ADD CONSTRAINT role_pk PRIMARY KEY ( id );
