@@ -38,7 +38,7 @@ public class EmployeeDaoTest {
     @Test
     public void getEmployees() {
         List<Employee> employees = employeeDao.getEmployees();
-        int expectedNumOfDept = 5;
+        int expectedNumOfDept = 4;
         employees.forEach(em -> System.out.println(em.toString()));
         Assert.assertEquals(expectedNumOfDept, employees.size());
     }

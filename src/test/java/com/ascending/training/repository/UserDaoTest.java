@@ -55,15 +55,15 @@ public class UserDaoTest {
     }
 
     @After
-    public void tearDown() {
-        userDao.delete(user.getEmail());
+    public void tearDown(){
+        userDao.delete(user);
     }
 
     @Test
     public void getUserByEmail() {
-        User user = userDao.getUserByEmail(email);
-        Assert.assertNotNull(user);
-        logger.debug(user.toString());
+        User u = userDao.getUserByEmail(user.getEmail());
+        Assert.assertNotNull(u);
+        logger.debug(u.toString());
     }
 
     @Test

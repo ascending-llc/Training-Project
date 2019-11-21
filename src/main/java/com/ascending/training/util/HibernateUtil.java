@@ -58,7 +58,7 @@ public class HibernateUtil {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             }
             catch (Exception e) {
-                logger.error("error building session factory",e);
+                logger.error(e.getMessage(),e);
             }
         }
 

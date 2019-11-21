@@ -11,7 +11,8 @@ import com.ascending.training.model.User;
 
 public interface UserDao {
     User save(User user);
-    boolean delete(String email);
+    User findById(Long Id);
     User getUserByEmail(String email);
     User getUserByCredentials(String email, String password);
+    void delete(User u);
 }

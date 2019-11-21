@@ -138,6 +138,7 @@
           <version>3.0.0</version>
         </plugin>
         <!--flyway database migration -->
+        <!--mvn clean compile flyway:migrate -Ddb_host=localhost:5432 -Ddb_name=training_dev -Ddb_username=admin -Ddb_password=password-->
         <plugin>
           <groupId>org.flywaydb</groupId>
           <artifactId>flyway-maven-plugin</artifactId>

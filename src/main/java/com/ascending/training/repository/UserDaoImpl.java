@@ -35,36 +35,35 @@ public class UserDaoImpl implements UserDao {
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
         if (user!=null) logger.debug(String.format("The user %s was inserted into the table.", user.toString()));
         return user;
     }
 
     @Override
-    public boolean delete(String email) {
-        String hql = "DELETE User u where u.email = :email";
-        int deletedCount = 0;
-        Transaction transaction = null;
+    public User findById(Long Id) {
+        String hql = "FROM User as u where u.id = :Id";
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery(hql);
+            query.setParameter("Id", Id);
+            return query.uniqueResult();
+        }
+    }
 
+    @Override
+    public void delete(User user) {
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            User u = getUserByEmail(email);
-            session.delete(u);
+            session.delete(user);
             transaction.commit();
-            deletedCount = 1;
         }
-        catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
-        }
-        return deletedCount >= 1 ? true : false;
     }
 
     @Override
     public User getUserByEmail(String email) {
         String hql = "FROM User as u where lower(u.email) = :email";
-
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery(hql);
             query.setParameter("email", email.toLowerCase());
