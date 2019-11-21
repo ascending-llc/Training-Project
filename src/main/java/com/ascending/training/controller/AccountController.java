@@ -44,10 +44,8 @@ public class AccountController {
     public String creatAccount(@PathVariable String employeeName, @RequestBody Account account) {
         logger.debug(String.format("Employee name: %s, account: %s", employeeName, account.toString()));
         String msg = "The account was created.";
-        boolean isSuccess = accountService.save(account, employeeName);
-
-        if (!isSuccess) msg = "The account was not created.";
-
+        Account act = accountService.save(account, employeeName);
+        if (act!=null) logger.error("The account was not created.");
         return msg;
     }
 }

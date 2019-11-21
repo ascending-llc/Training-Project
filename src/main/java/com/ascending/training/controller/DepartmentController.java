@@ -41,24 +41,19 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String creatDepartment(@RequestBody Department department) {
+    public Department creatDepartment(@RequestBody Department department) {
         logger.debug("Department: " + department.toString());
-        String msg = "The department was created.";
-        boolean isSuccess = departmentService.save(department);
-
-        if (!isSuccess) msg = "The department was not created.";
-
-        return msg;
+        Department dep = departmentService.save(department);
+        if (dep!=null) logger.error("The department was not created.");
+        return dep;
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateDepartment(@RequestBody Department department) {
+    public Department updateDepartment(@RequestBody Department department) {
         logger.debug("Department: " + department.toString());
-        String msg = "The department was updated.";
-        boolean isSuccess = departmentService.update(department);
-        if (!isSuccess) msg = "The department was not updated.";
-
-        return msg;
+        Department updateDep = departmentService.update(department);
+        if (updateDep!=null) logger.error("The department was not updated.");
+        return updateDep;
     }
 
     @RequestMapping(value = "/{deptName}", method = RequestMethod.DELETE, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -67,7 +62,6 @@ public class DepartmentController {
         String msg = "The department was deleted.";
         boolean isSuccess = departmentService.delete(deptName);
         if (!isSuccess) msg = "The department was not deleted.";
-
         return msg;
     }
 }

@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,8 +27,7 @@ import java.util.List;
 public class AccountDaoTest {
     @Autowired
     private AccountDao accountDao;
-    @Autowired
-    private Logger logger;
+    private Logger logger=LoggerFactory.getLogger(getClass());
 
     @Before
     public void init() {
@@ -36,14 +36,14 @@ public class AccountDaoTest {
     @Test
     public void getAccounts() {
         List<Account> accounts = accountDao.getAccounts();
-        int expectedNumOfDept = 5;
+        int expectedNumOfDept = 4;
         accounts.forEach(acct -> logger.debug(acct.toString()));
         Assert.assertEquals(expectedNumOfDept, accounts.size());
     }
 
     @Test
     public void getEmployeeById() {
-        int id = 2;
+        Long id = 2L;
         Account account = accountDao.getAccountById(id);
         Assert.assertEquals(id, account.getId());
         logger.debug(account.toString());

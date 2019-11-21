@@ -15,9 +15,9 @@ import java.util.List;
 
 public class DepartmentDao {
     //STEP 1: Database information
-    static final String DB_URL = "jdbc:postgresql://localhost:5432/training_db";
+    static final String DB_URL = "jdbc:postgresql://localhost:5431/training_dev";
     static final String USER = "admin";
-    static final String PASS = "Training123!";
+    static final String PASS = "password";
 
     public List<Department> getDepartments() {
         List<Department> departments = new ArrayList();
@@ -40,7 +40,7 @@ public class DepartmentDao {
             //STEP 4: Extract data from result set
             while(rs.next()) {
                 //Retrieve by column name
-                int id  = rs.getInt("id");
+                Long id  = rs.getLong("id");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 String location = rs.getString("location");

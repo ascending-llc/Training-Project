@@ -12,8 +12,8 @@ import com.ascending.training.model.Department;
 import java.util.List;
 
 public interface DepartmentDao {
-    boolean save(Department department);
-    boolean update(Department department);
+    Department save(Department department);
+    Department update(Department department);
     boolean delete(String deptName);
     List<Department> getDepartments();
     List<Department> getDepartmentsWithChildren();

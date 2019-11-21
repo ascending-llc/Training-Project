@@ -18,7 +18,7 @@ import java.util.List;
 public class EmployeeService {
     @Autowired private EmployeeDao employeeDao;
 
-    public boolean save(Employee employee, String deptName) {
+    public Employee save(Employee employee, String deptName) {
         return employeeDao.save(employee, deptName);
     }
 

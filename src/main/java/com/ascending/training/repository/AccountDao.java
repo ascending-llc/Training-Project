@@ -12,7 +12,7 @@ import com.ascending.training.model.Account;
 import java.util.List;
 
 public interface AccountDao {
-    boolean save(Account account, String employeeName);
+    Account save(Account account, String employeeName);
     List<Account> getAccounts();
-    Account getAccountById(int id);
+    Account getAccountById(Long id);
 }

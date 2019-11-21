@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired private UserDao userDao;
 
-    public boolean save(User user) {
+    public User save(User user) {
         return userDao.save(user);
     }
 

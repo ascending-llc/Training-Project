@@ -18,7 +18,7 @@ import java.util.List;
 public class AccountService {
     @Autowired private AccountDao accountDao;
 
-    public boolean save(Account account, String employeeName) {
+    public Account save(Account account, String employeeName) {
         return accountDao.save(account, employeeName);
     }
 
@@ -26,7 +26,7 @@ public class AccountService {
         return accountDao.getAccounts();
     }
 
-    public Account getAccountById(int id) {
+    public Account getAccountById(Long id) {
         return accountDao.getAccountById(id);
     }
 }

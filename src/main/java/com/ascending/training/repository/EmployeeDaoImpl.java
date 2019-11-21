@@ -12,9 +12,11 @@ import com.ascending.training.model.Employee;
 import com.ascending.training.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,15 +24,16 @@ import java.util.List;
 
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
-    @Autowired private Logger logger;
+    @Autowired
+    private SessionFactory sessionFactory;
+    private Logger logger=LoggerFactory.getLogger(getClass());
     @Autowired private DepartmentDao departmentDao;
 
     @Override
-    public boolean save(Employee employee, String deptName) {
+    public Employee save(Employee employee, String deptName) {
         Transaction transaction = null;
-        boolean isSuccess = false;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Department department = departmentDao.getDepartmentByName(deptName);
 
             if (department != null) {
@@ -38,7 +41,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setDepartment(department);
                 session.save(employee);
                 transaction.commit();
-                isSuccess = true;
+                return employee;
             }
             else {
                 logger.debug(String.format("The department [%s] doesn't exist.", deptName));
@@ -46,20 +49,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
-        }
+            logger.debug(String.format("The employee %s was inserted into the table.", employee.toString()));
+            logger.error(e.getMessage(),e);
 
-        if (isSuccess) logger.debug(String.format("The employee %s was inserted into the table.", employee.toString()));
-        return isSuccess;
+        }
+        return null;
     }
 
     @Override
-    public int updateEmployeeAddress(String name, String address) {
+    public Integer updateEmployeeAddress(String name, String address) {
         String hql = "UPDATE Employee as em set em.address = :address where em.name = :name";
         int updatedCount = 0;
         Transaction transaction = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Employee> query = session.createQuery(hql);
             query.setParameter("name", name);
             query.setParameter("address", address);
@@ -67,6 +70,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             transaction = session.beginTransaction();
             updatedCount = query.executeUpdate();
             transaction.commit();
+            return updatedCount;
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -82,7 +86,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public List<Employee> getEmployees() {
         String hql = "FROM Employee em left join fetch em.accounts";
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Employee> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         }
@@ -92,7 +96,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Employee getEmployeeByName(String name) {
         String hql = "FROM Employee as em left join fetch em.accounts where em.name = :name";
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Employee> query = session.createQuery(hql);
             query.setParameter("name", name);
 

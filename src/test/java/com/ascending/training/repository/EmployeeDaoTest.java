@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class EmployeeDaoTest {
         /*
         * The account will not be saved as cascade = CascadeType.REMOVE defined in Employee class
         * */
-        Account account = new Account("checking", 99999.99f);
+        Account account = new Account("checking", new BigDecimal(99999.99));
         Set<Account> accounts = new HashSet();
         accounts.add(account);
         employee.setAccounts(accounts);

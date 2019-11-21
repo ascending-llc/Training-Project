@@ -20,11 +20,11 @@ public class DepartmentService {
     @Autowired private Logger logger;
     @Autowired private DepartmentDao departmentDao;
 
-    public boolean save(Department department) {
+    public Department save(Department department) {
         return departmentDao.save(department);
     }
 
-    public boolean update(Department department) {
+    public Department update(Department department) {
         return departmentDao.update(department);
     }
 

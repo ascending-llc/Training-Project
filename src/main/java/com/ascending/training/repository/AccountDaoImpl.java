@@ -12,9 +12,11 @@ import com.ascending.training.model.Employee;
 import com.ascending.training.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,15 +24,15 @@ import java.util.List;
 
 @Repository
 public class AccountDaoImpl implements AccountDao {
-    @Autowired private Logger logger;
+    @Autowired
+    private SessionFactory sessionFactory;
+    private Logger logger=LoggerFactory.getLogger(getClass());
     @Autowired private EmployeeDao employeeDao;
 
     @Override
-    public boolean save(Account account, String employeeName) {
+    public Account save(Account account, String employeeName) {
         Transaction transaction = null;
-        boolean isSuccess = false;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Employee employee = employeeDao.getEmployeeByName(employeeName);
 
             if (employee != null) {
@@ -38,7 +40,7 @@ public class AccountDaoImpl implements AccountDao {
                 account.setEmployee(employee);
                 session.save(account);
                 transaction.commit();
-                isSuccess = true;
+                return account;
             }
             else {
                 logger.debug(String.format("The employee [%s] doesn't exist.", employeeName));
@@ -48,26 +50,23 @@ public class AccountDaoImpl implements AccountDao {
             if (transaction != null) transaction.rollback();
             logger.error(e.getMessage());
         }
-
-        if (isSuccess) logger.debug(String.format("The account %s was inserted into the table.", account.toString()));
-
-        return isSuccess;
+        return null;
     }
 
     @Override
     public List<Account> getAccounts() {
         String hql = "FROM Account as act left join fetch act.employee";
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Account> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         }
     }
 
-    public Account getAccountById(int id) {
+    public Account getAccountById(Long id) {
         String hql = "FROM Account as act join fetch act.employee where act.id = :id";
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Account> query = session.createQuery(hql);
             query.setParameter("id", id);
 

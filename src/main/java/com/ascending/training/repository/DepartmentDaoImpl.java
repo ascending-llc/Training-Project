@@ -13,9 +13,11 @@ import com.ascending.training.model.Employee;
 import com.ascending.training.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,48 +25,41 @@ import java.util.List;
 
 @Repository
 public class DepartmentDaoImpl implements DepartmentDao {
-    @Autowired private Logger logger;
+    @Autowired
+    private SessionFactory sessionFactory;
+    private Logger logger=LoggerFactory.getLogger(getClass());
 
     @Override
-    public boolean save(Department department) {
+    public Department save(Department department) {
         Transaction transaction = null;
-        boolean isSuccess = true;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.save(department);
             transaction.commit();
+            return department;
         }
         catch (Exception e) {
-            isSuccess = false;
             if (transaction != null) transaction.rollback();
             logger.error(e.getMessage());
         }
-
-        if (isSuccess) logger.debug(String.format("The department %s was inserted into the table.", department.toString()));
-
-        return isSuccess;
+        return null;
     }
 
     @Override
-    public boolean update(Department department) {
+    public Department update(Department department) {
         Transaction transaction = null;
-        boolean isSuccess = true;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.saveOrUpdate(department);
             transaction.commit();
         }
         catch (Exception e) {
-            isSuccess = false;
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
-
-        if (isSuccess) logger.debug(String.format("The department %s was updated.", department.toString()));
-
-        return isSuccess;
+        return null;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class AccountServiceTest {
 
     @Test
     public void getEmployeeById() {
-        int id = 2;
+        Long id = 2L;
         Account account = accountService.getAccountById(id);
         Assert.assertEquals(id, account.getId());
         logger.debug(account.toString());

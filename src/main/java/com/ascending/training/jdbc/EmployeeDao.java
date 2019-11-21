@@ -11,9 +11,9 @@ import com.ascending.training.model.Employee;
 import java.sql.*;
 
 public class EmployeeDao {
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/training_db";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5431/training_dev";
     private static final String USER = "admin";
-    private static final String PASS = "Training123!";
+    private static final String PASS = "password";
 
     public Employee getEmployee(String employeeName) {
         Connection conn = null;
@@ -29,7 +29,7 @@ public class EmployeeDao {
             rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                int id  = rs.getInt("id");
+                Long id  = rs.getLong("id");
                 String name = rs.getString("name");
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
