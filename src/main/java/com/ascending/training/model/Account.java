@@ -12,13 +12,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @Table(name = "account")
 public class Account {
     public  Account() {}
-    public  Account(String accountType, float balance) {
+    public  Account(String accountType, BigDecimal balance) {
         this.accountType = accountType;
         this.balance = balance;
     }
@@ -27,23 +28,23 @@ public class Account {
     //@SequenceGenerator(name="account_id_generator", sequenceName="account_id_seq", allocationSize = 1)
     //@GeneratedValue(strategy=SEQUENCE, generator="account_id_generator")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name ="account_type")
     private String accountType;
 
     @Column(name = "balance")
-    private float balance;
+    private BigDecimal balance;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,11 +55,11 @@ public class Account {
         this.accountType = accountType;
     }
 
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -77,7 +78,7 @@ public class Account {
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
         return id == account.id &&
-                Float.compare(account.balance, balance) == 0 &&
+                account.balance.compareTo(balance) == 0 &&
                 accountType.equals(account.accountType);
     }
 

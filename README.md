@@ -15,7 +15,8 @@ The code demonstrates:
 
 Uses flyway as migration tool
 
-mvn clean compile flyway:clean flyway:migrate -Ddatabase_url=localhost:port/your_database -Ddatabase_user=your_username -Ddatabase_password=your_password
+mvn clean compile flyway:clean flyway:migrate -Ddb_host=localhost:port -Ddb_name=your_database -Ddb_username=your_username -Ddb_password=your_password
+mvn clean compile flyway:clean flyway:migrate -Ddb_host=localhost:5431 -Ddb_name=training_dev -Ddb_username=admin -Ddb_password=xxxxx
 
 # About ASCENDING
 
