@@ -72,5 +72,7 @@ public class EmployeeDaoTest {
 
         employee.setId(employee2.getId());
         Assert.assertEquals(employee, employee2);
+        employeeDao.delete(employee2);
+
     }
 }

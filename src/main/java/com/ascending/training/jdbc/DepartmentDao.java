@@ -19,6 +19,18 @@ public class DepartmentDao {
     static final String USER = "admin";
     static final String PASS = "password";
 
+    public Department save(Department d){
+        //TODO jdbc save department to database;
+        return new Department();
+
+    }
+
+    public boolean delete(Long Id){
+        //TODO jdbc delete department to database;
+        return false;
+
+    }
+
     public List<Department> getDepartments() {
         List<Department> departments = new ArrayList();
         Connection conn = null;

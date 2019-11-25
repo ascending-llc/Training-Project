@@ -16,4 +16,5 @@ public interface EmployeeDao {
     Integer updateEmployeeAddress(String name, String address);
     List<Employee> getEmployees();
     Employee getEmployeeByName(String name);
+    void delete(Employee employee);
 }

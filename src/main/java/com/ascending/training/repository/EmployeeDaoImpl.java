@@ -9,7 +9,6 @@ package com.ascending.training.repository;
 
 import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
-import com.ascending.training.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -101,6 +100,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
             query.setParameter("name", name);
 
             return query.uniqueResult();
+        }
+    }
+
+    @Override
+    public void delete(Employee employee) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(employee);
+            transaction.commit();
         }
     }
 }
