@@ -8,7 +8,7 @@
 package com.ascending.training.repository;
 
 
-import com.ascending.training.init.AppInitializer;
+import com.ascending.training.AppInitializer;
 import com.ascending.training.model.Role;
 import com.ascending.training.model.User;
 import org.apache.commons.codec.digest.DigestUtils;

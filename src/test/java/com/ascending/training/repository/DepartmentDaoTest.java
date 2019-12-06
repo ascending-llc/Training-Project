@@ -7,7 +7,7 @@
 
 package com.ascending.training.repository;
 
-import com.ascending.training.init.AppInitializer;
+import com.ascending.training.AppInitializer;
 import com.ascending.training.model.Department;
 import com.ascending.training.service.DepartmentService;
 import org.junit.Assert;

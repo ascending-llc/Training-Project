@@ -7,7 +7,7 @@
 
 package com.ascending.training.controller;
 
-import com.ascending.training.init.AppInitializer;
+import com.ascending.training.AppInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

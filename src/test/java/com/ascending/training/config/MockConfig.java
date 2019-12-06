@@ -18,4 +18,5 @@ public class MockConfig {
     public AmazonS3 getAmazonS3Mock() {
         return  mock(AmazonS3.class);
     }
+
 }

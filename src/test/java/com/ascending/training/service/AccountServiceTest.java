@@ -7,7 +7,7 @@
 
 package com.ascending.training.service;
 
-import com.ascending.training.init.AppInitializer;
+import com.ascending.training.AppInitializer;
 import com.ascending.training.model.Account;
 import com.ascending.training.model.Employee;
 import org.junit.Assert;
