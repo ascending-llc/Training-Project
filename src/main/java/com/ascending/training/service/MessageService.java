@@ -31,7 +31,7 @@ public class MessageService {
 
     private String queueUrl;
 
-    public MessageService(@Autowired AmazonSQS sqsClient,@Value("${aws.queue.name}") String queueName){
+    public MessageService(@Autowired AmazonSQS sqsClient,@Value("${aws.sqs.name}") String queueName){
         this.amazonSQS = sqsClient;
         this.queueUrl = getQueueUrl(queueName);
     }
