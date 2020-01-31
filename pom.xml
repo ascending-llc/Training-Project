@@ -25,6 +25,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <flyway.version>6.0.4</flyway.version>
+    <start-class>com.ascending.training.init.AppInitializer</start-class>
   </properties>
 
   <parent>
@@ -38,6 +39,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -100,7 +106,7 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
-      <version>1.11.592</version>
+      <version>1.11.714</version>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>

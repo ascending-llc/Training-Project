@@ -9,6 +9,7 @@ package com.ascending.training.filter;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -25,11 +26,13 @@ public class LogFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        if (logger == null) {
+            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
+        }
         long startTime = System.currentTimeMillis();
         HttpServletRequest req = (HttpServletRequest)request;
         String logInfo = logInfo(req);
