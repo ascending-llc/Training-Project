@@ -12,12 +12,13 @@ import com.ascending.training.model.Department;
 import java.util.List;
 
 public interface DepartmentDao {
-    boolean save(Department department);
-    boolean update(Department department);
+    Department save(Department department);
+    Department update(Department department);
     boolean delete(String deptName);
+    boolean delete(Department dep);
     List<Department> getDepartments();
     List<Department> getDepartmentsWithChildren();
     Department getDepartmentByName(String deptName);
-    List<Object[]> getDepartmentAndEmployees(String deptName);
+    Department getDepartmentAndEmployeesBy(String deptName);
     List<Object[]> getDepartmentAndEmployeesAndAccounts(String deptName);
 }

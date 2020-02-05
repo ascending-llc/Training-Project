@@ -26,45 +26,37 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Autowired private Logger logger;
 
     @Override
-    public boolean save(Department department) {
+    public Department save(Department department) {
         Transaction transaction = null;
-        boolean isSuccess = true;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(department);
             transaction.commit();
+            return department;
         }
         catch (Exception e) {
-            isSuccess = false;
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("failure to insert record",e);
+            return null;
         }
-
-        if (isSuccess) logger.debug(String.format("The department %s was inserted into the table.", department.toString()));
-
-        return isSuccess;
+//        if (department!=null) logger.debug(String.format("The department %s was inserted into the table.", department.toString()));
     }
 
     @Override
-    public boolean update(Department department) {
+    public Department update(Department department) {
         Transaction transaction = null;
-        boolean isSuccess = true;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.saveOrUpdate(department);
             transaction.commit();
+            return department;
         }
         catch (Exception e) {
-            isSuccess = false;
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("failure to update record",e.getMessage());
+            return null;
         }
-
-        if (isSuccess) logger.debug(String.format("The department %s was updated.", department.toString()));
-
-        return isSuccess;
+//        if (isSuccess) logger.debug(String.format("The department %s was updated.", department.toString()));
     }
 
     @Override
@@ -75,13 +67,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            //Query<Department> query = session.createQuery(hql);
-            //query.setParameter("deptName1", deptName);
-            //deletedCount = query.executeUpdate();
-            Department dept = getDepartmentByName(deptName);
-            session.delete(dept);
+            Query<Department> query = session.createQuery(hql);
+            query.setParameter("deptName1", deptName);
+            deletedCount = query.executeUpdate();
+//            Department dept = getDepartmentByName(deptName);
+//            session.delete(dept);
             transaction.commit();
-            deletedCount = 1;
+//            deletedCount = 1;
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -91,6 +83,28 @@ public class DepartmentDaoImpl implements DepartmentDao {
         logger.debug(String.format("The department %s was deleted", deptName));
 
         return deletedCount >= 1 ? true : false;
+    }
+
+    @Override
+    public boolean delete(Department dep) {
+        String hql = "DELETE Department as dep where dep.id = :Id";
+        int deletedCount = 0;
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Query<Department> query = session.createQuery(hql);
+            query.setParameter("Id", dep.getId());
+            deletedCount = query.executeUpdate();
+            transaction.commit();
+            return deletedCount >= 1 ? true : false;
+        }
+        catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            logger.error("unable to delete record",e);
+        }
+//        logger.debug(String.format("The department %s was deleted", dep.getName()));
+        return false;
     }
 
     @Override
@@ -120,36 +134,27 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Override
     public Department getDepartmentByName(String deptName) {
         if (deptName == null) return null;
-        String hql = "FROM Department as dept left join fetch dept.employees as em left join " +
-                     "fetch em.accounts where lower(dept.name) = :name";
+        String hql = "FROM Department as dept where lower(dept.name) = :name";
         //String hql = "FROM Department as dept where lower(dept.name) = :name";
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Department> query = session.createQuery(hql);
             query.setParameter("name", deptName.toLowerCase());
-
             return query.uniqueResult();
         }
     }
 
     @Override
-    public List<Object[]> getDepartmentAndEmployees(String deptName) {
+    //HR, hr, Hr deptName.toLowerCase() = hr
+    //HR,hr,Hr lower(:name) = hr
+    public Department getDepartmentAndEmployeesBy(String deptName) {
         if (deptName == null) return null;
-
-        String hql = "FROM Department as dept left join dept.employees where lower(dept.name) = :name";
-
+        String hql = "FROM Department as dept left join fetch dept.employees where lower(dept.name) = :name";
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query query = session.createQuery(hql);
+            Query<Department> query = session.createQuery(hql);
             query.setParameter("name", deptName.toLowerCase());
 
-            List<Object[]> resultList = query.list();
-
-            for (Object[] obj : resultList) {
-                logger.debug(((Department)obj[0]).toString());
-                logger.debug(((Employee)obj[1]).toString());
-            }
-
-            return resultList;
+            Department result = query.uniqueResult();
+            return result;
         }
     }
 

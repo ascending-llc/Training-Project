@@ -78,19 +78,12 @@ public class Department {
     }
 
     public Set<Employee> getEmployees() {
-        try {
-            int size = employees.size();
-        }
-        catch (Exception e) {
-            return null;
-        }
-
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
-    }
+//    public void setEmployees(Set<Employee> employees) {
+//        this.employees = employees;
+//    }
 
     @Override
     public boolean equals(Object o) {
