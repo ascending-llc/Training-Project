@@ -164,9 +164,9 @@
           <version>${flyway.version}</version>
           <configuration>
             <driver>org.postgresql.Driver</driver>
-            <url>jdbc:postgresql://localhost:5432/training_db</url>
+            <url>jdbc:postgresql://localhost:5431/training_dev</url>
             <user>admin</user>
-            <password>Training123!</password>
+            <password>password</password>
             <schemas>
               <schema>public</schema>
             </schemas>

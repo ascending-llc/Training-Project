@@ -26,10 +26,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Autowired private DepartmentDao departmentDao;
 
     @Override
-    public boolean save(Employee employee, String deptName) {
+    public Employee save(Employee employee, String deptName) {
         Transaction transaction = null;
-        boolean isSuccess = false;
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Department department = departmentDao.getDepartmentByName(deptName);
 
@@ -38,44 +36,96 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setDepartment(department);
                 session.save(employee);
                 transaction.commit();
-                isSuccess = true;
+                return employee;
             }
             else {
                 logger.debug(String.format("The department [%s] doesn't exist.", deptName));
+                return null;
             }
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("The employee is not able to be saved",e);
+            return null;
         }
-
-        if (isSuccess) logger.debug(String.format("The employee %s was inserted into the table.", employee.toString()));
-        return isSuccess;
     }
 
     @Override
-    public int updateEmployeeAddress(String name, String address) {
-        String hql = "UPDATE Employee as em set em.address = :address where em.name = :name";
-        int updatedCount = 0;
+    public Employee save(Employee employee) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                transaction = session.beginTransaction();
+                session.save(employee);
+                transaction.commit();
+                return employee;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            logger.error("The employee is not able to be saved",e);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean delete(Employee employee) {
+        String hql = "DELETE Employee as emp where emp.id = :Id";
+        int deletedCount = 0;
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Employee> query = session.createQuery(hql);
-            query.setParameter("name", name);
-            query.setParameter("address", address);
-
             transaction = session.beginTransaction();
-            updatedCount = query.executeUpdate();
+            Query<Department> query = session.createQuery(hql);
+            query.setParameter("Id", employee.getId());
+            deletedCount = query.executeUpdate();
             transaction.commit();
+            return deletedCount >= 1 ? true : false;
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("unable to delete record",e);
         }
+        return false;
+    }
 
-        logger.debug(String.format("The employee %s was updated, total updated record(s): %d", name, updatedCount));
+//    @Override
+//    public int updateEmployeeAddress(String name, String address) {
+//        String hql = "UPDATE Employee as em set em.address = :address where em.name = :name";
+//        int updatedCount = 0;
+//        Transaction transaction = null;
+//
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            Query<Employee> query = session.createQuery(hql);
+//            query.setParameter("name", name);
+//            query.setParameter("address", address);
+//
+//            transaction = session.beginTransaction();
+//            updatedCount = query.executeUpdate();
+//            transaction.commit();
+//        }
+//        catch (Exception e) {
+//            if (transaction != null) transaction.rollback();
+//            logger.error(e.getMessage());
+//        }
+//
+//        logger.debug(String.format("The employee %s was updated, total updated record(s): %d", name, updatedCount));
+//
+//        return updatedCount;
+//    }
+    @Override
+    public Employee update(Employee employee){
+        Transaction transaction = null;
 
-        return updatedCount;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(employee);
+            transaction.commit();
+            return employee;
+        }
+        catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            logger.error("not able to save employee",e);
+        }
+//        logger.debug(String.format("The employee %s was updated, total updated record(s): %d", name, updatedCount));
+        return employee;
     }
 
     @Override

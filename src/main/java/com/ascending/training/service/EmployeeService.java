@@ -18,12 +18,12 @@ import java.util.List;
 public class EmployeeService {
     @Autowired private EmployeeDao employeeDao;
 
-    public boolean save(Employee employee, String deptName) {
+    public Employee save(Employee employee, String deptName) {
         return employeeDao.save(employee, deptName);
     }
 
-    public int updateEmployeeAddress(String name, String address) {
-        return employeeDao.updateEmployeeAddress(name, address);
+    public Employee update(Employee employee) {
+        return employeeDao.update(employee);
     }
 
     public List<Employee> getEmployees() {

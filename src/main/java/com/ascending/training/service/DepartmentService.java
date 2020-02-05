@@ -8,6 +8,7 @@
 package com.ascending.training.service;
 
 import com.ascending.training.model.Department;
+import com.ascending.training.model.Employee;
 import com.ascending.training.repository.DepartmentDao;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ public class DepartmentService {
     @Autowired private Logger logger;
     @Autowired private DepartmentDao departmentDao;
 
-    public boolean save(Department department) {
+    public Department save(Department department) {
         return departmentDao.save(department);
     }
 
-    public boolean update(Department department) {
+    public Department update(Department department) {
         return departmentDao.update(department);
     }
 
@@ -43,8 +44,8 @@ public class DepartmentService {
         return departmentDao.getDepartmentByName(deptName);
     }
 
-    public List<Object[]> getDepartmentAndEmployees(String deptName) {
-        return departmentDao.getDepartmentAndEmployees(deptName);
+    public Department getDepartmentAndEmployees(String deptName) {
+        return departmentDao.getDepartmentAndEmployeesBy(deptName);
     }
 
     public List<Object[]> getDepartmentAndEmployeesAndAccounts(String deptName) {

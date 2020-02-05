@@ -70,19 +70,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
             Query<Department> query = session.createQuery(hql);
             query.setParameter("deptName1", deptName);
             deletedCount = query.executeUpdate();
-//            Department dept = getDepartmentByName(deptName);
-//            session.delete(dept);
             transaction.commit();
-//            deletedCount = 1;
+            return deletedCount >= 1 ? true : false;
         }
         catch (Exception e) {
             if (transaction != null) transaction.rollback();
             logger.error(e.getMessage());
         }
-
-        logger.debug(String.format("The department %s was deleted", deptName));
-
-        return deletedCount >= 1 ? true : false;
+        return false;
     }
 
     @Override
