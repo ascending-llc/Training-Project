@@ -8,6 +8,7 @@
 package com.ascending.training.filter;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -20,7 +21,8 @@ import java.util.*;
 
 @WebFilter(filterName = "logFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
 public class LogFilter implements Filter {
-    @Autowired private Logger logger;
+//    @Autowired private Logger logger;
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private final List<String> excludedWords = Arrays.asList("newPasswd", "confirmPasswd", "passwd", "password");
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
 
@@ -30,9 +32,9 @@ public class LogFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        if (logger == null) {
-            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
-        }
+//        if (logger == null) {
+//            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
+//        }
         long startTime = System.currentTimeMillis();
         HttpServletRequest req = (HttpServletRequest)request;
         String logInfo = logInfo(req);

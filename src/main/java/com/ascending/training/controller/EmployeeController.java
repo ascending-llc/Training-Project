@@ -33,13 +33,13 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/{deptName}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String creatEmployee(@RequestBody Employee employee, @PathVariable String deptName) {
+    public Employee creatEmployee(@RequestBody Employee employee, @PathVariable String deptName) {
         logger.debug(String.format("Department name: %s, employee: %s", deptName, employee.toString()));
         String msg = "The employee was created.";
-        boolean isSuccess = employeeService.save(employee, deptName);
+        Employee em = employeeService.save(employee, deptName);
 
-        if (!isSuccess) msg = "The employee was not created.";
+        if (em!=null) msg = "The employee was not created.";
 
-        return msg;
+        return em;
     }
 }

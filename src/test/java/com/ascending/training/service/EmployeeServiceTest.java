@@ -50,9 +50,11 @@ public class EmployeeServiceTest {
     public void updateEmployeeAddress() {
         String name = "dwang";
         String address = "11126 Fairhaven Court, Fairfax, VA";
-        employeeService.updateEmployeeAddress(name, address);
         Employee employee = employeeService.getEmployeeByName(name);
-        Assert.assertEquals(address, employee.getAddress());
+        employee.setAddress(address);
+        employee = employeeService.update(employee);
+        Employee actual = employeeService.getEmployeeByName(name);
+        Assert.assertEquals(actual.getAddress(), address);
     }
 
     @Test

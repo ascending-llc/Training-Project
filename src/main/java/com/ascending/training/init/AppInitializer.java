@@ -13,6 +13,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.ascending.training.model.Department;
+import com.ascending.training.service.DepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -70,6 +72,14 @@ public class AppInitializer extends SpringBootServletInitializer {
     public Logger logger(InjectionPoint injectionPoint) {
         return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
+
+//    @Bean
+//    public DepartmentService getDepartmentService(){
+//        DepartmentService ds = new DepartmentService();
+//        ds.setPropert (xxx);
+//        ds.setPropert(yyy);
+//        return ds;
+//    }
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)

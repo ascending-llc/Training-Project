@@ -55,6 +55,27 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
+    public Account save(Account account) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            if (account!=null) {
+                transaction = session.beginTransaction();
+                session.save(account);
+                transaction.commit();
+                return account;
+            }
+            else {
+                logger.debug(String.format("The account doesn't exist."));
+            }
+        }
+        catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
     public List<Account> getAccounts() {
         String hql = "FROM Account as act left join fetch act.employee";
 

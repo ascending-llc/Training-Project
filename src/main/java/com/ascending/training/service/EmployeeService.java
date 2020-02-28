@@ -16,7 +16,8 @@ import java.util.List;
 
 @Service
 public class EmployeeService {
-    @Autowired private EmployeeDao employeeDao;
+    @Autowired
+    private EmployeeDao employeeDao;
 
     public Employee save(Employee employee, String deptName) {
         return employeeDao.save(employee, deptName);

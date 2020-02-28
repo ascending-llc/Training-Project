@@ -22,12 +22,14 @@ public class DepartmentController {
     @Autowired private Logger logger;
     @Autowired private DepartmentService departmentService;
 
+    // /departments GET   /dep
     @RequestMapping(value = "", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
     public List<Department> getDepartments() {
         List<Department> departments = departmentService.getDepartments();
         return departments;
     }
 
+    ///departments/with-children  GET
     @RequestMapping(value = "/with-children", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
     public List<Department> getDepartmentsWithChildren() {
         List<Department> departments = departmentService.getDepartmentsWithChildren();
@@ -41,24 +43,24 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String creatDepartment(@RequestBody Department department) {
+    public Department creatDepartment(@RequestBody Department department) {
         logger.debug("Department: " + department.toString());
         String msg = "The department was created.";
-        boolean isSuccess = departmentService.save(department);
+        Department dep = departmentService.save(department);
 
-        if (!isSuccess) msg = "The department was not created.";
+        if (dep==null) msg = "The department was not created.";
 
-        return msg;
+        return dep;
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public String updateDepartment(@RequestBody Department department) {
+    public Department updateDepartment(@RequestBody Department department) {
         logger.debug("Department: " + department.toString());
         String msg = "The department was updated.";
-        boolean isSuccess = departmentService.update(department);
-        if (!isSuccess) msg = "The department was not updated.";
+        Department dep = departmentService.update(department);
+        if (dep==null) msg = "The department was not update.";
 
-        return msg;
+        return dep;
     }
 
     @RequestMapping(value = "/{deptName}", method = RequestMethod.DELETE, consumes = {MediaType.APPLICATION_JSON_VALUE})

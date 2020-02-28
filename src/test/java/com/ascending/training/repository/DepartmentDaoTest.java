@@ -10,13 +10,11 @@ package com.ascending.training.repository;
 import com.ascending.training.init.AppInitializer;
 import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
-import com.ascending.training.service.DepartmentService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -34,8 +32,8 @@ public class DepartmentDaoTest {
     private DepartmentDao departmentDao;
     @Autowired
     private EmployeeDao employeeDao;
-    @Autowired
-    private Logger logger;
+//    @Autowired
+//    private Logger logger;
     private Employee e1;
     private Employee e2;
     private Department d1;

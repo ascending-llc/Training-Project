@@ -10,6 +10,7 @@ package com.ascending.training.service;
 import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
 import com.ascending.training.repository.DepartmentDao;
+import com.ascending.training.repository.DepartmentDaoImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,9 @@ import java.util.List;
 
 @Service
 public class DepartmentService {
-    @Autowired private Logger logger;
-    @Autowired private DepartmentDao departmentDao;
+    //@Autowired private Logger logger;
+    @Autowired
+   private DepartmentDao departmentDao;
 
     public Department save(Department department) {
         return departmentDao.save(department);

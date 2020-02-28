@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface AccountDao {
     boolean save(Account account, String employeeName);
+    Account save(Account account);
     List<Account> getAccounts();
     Account getAccountById(int id);
 }
