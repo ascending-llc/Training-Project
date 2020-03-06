@@ -42,6 +42,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getUserById(Long Id) {
+        String hql = "FROM User as u where u.id = :id";
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<User> query = session.createQuery(hql);
+            query.setParameter("id", Id);
+            return query.uniqueResult();
+        }
+    }
+
+
+    @Override
     public User getUserByEmail(String email) {
         String hql = "FROM User as u where lower(u.email) = :email";
 
@@ -54,7 +66,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByCredentials(String email, String password) {
+    public User getUserByCredentials(String email, String password) throws Exception {
         String hql = "FROM User as u where lower(u.email) = :email and u.password = :password";
         logger.debug(String.format("User email: %s, password: %s", email, password));
 
@@ -64,6 +76,9 @@ public class UserDaoImpl implements UserDao {
             query.setParameter("password", password);
 
             return query.uniqueResult();
+        }
+        catch (Exception e){
+            throw new Exception("can't find user record or session");
         }
     }
 }

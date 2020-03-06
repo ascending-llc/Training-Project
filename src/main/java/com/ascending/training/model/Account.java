@@ -15,7 +15,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 public class Account {
     public  Account() {}
     public  Account(String accountType, float balance) {
@@ -27,7 +27,7 @@ public class Account {
     //@SequenceGenerator(name="account_id_generator", sequenceName="account_id_seq", allocationSize = 1)
     //@GeneratedValue(strategy=SEQUENCE, generator="account_id_generator")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name ="account_type")
     private String accountType;
@@ -40,10 +40,10 @@ public class Account {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

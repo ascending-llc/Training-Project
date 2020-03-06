@@ -1,4 +1,4 @@
-insert into role (name, allowed_resource, allowed_read, allowed_create, allowed_update, allowed_delete) values
+insert into roles (name, allowed_resource, allowed_read, allowed_create, allowed_update, allowed_delete) values
 ('Admin', '/', 'Y', 'Y', 'Y', 'Y'),
 ('Manager', '/depts,/departments,/employees,/ems,/acnts,/accounts', 'Y', 'Y', 'Y', 'N'),
 ('user', '/employees,/ems,/acnts,/accounts', 'Y', 'N', 'N', 'N')
@@ -12,7 +12,7 @@ insert into users (name, password, first_name, last_name, email) values
 ;
 commit;
 
-insert into users_role values
+insert into users_roles values
 (1, 1),
 (2, 2),
 (3, 3),

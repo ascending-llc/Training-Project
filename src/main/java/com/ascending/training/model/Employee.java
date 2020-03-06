@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 public class Employee {
     public Employee() { }
     public Employee(String name, String firstName, String lastName, String email, String address) {
@@ -31,7 +31,7 @@ public class Employee {
     //@SequenceGenerator(name = "employee_id_generator", sequenceName = "employee_id_seq", allocationSize = 1)
     //@GeneratedValue(strategy = SEQUENCE, generator = "employee_id_generator")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -56,11 +56,11 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Account> accounts;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

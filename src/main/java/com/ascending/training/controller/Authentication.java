@@ -12,13 +12,13 @@ import com.ascending.training.service.UserService;
 import com.ascending.training.util.JwtUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = {"/auth"})
@@ -29,24 +29,41 @@ public class Authentication {
     private String tokenKeyWord = "Authorization";
     private String tokenType = "Bearer";
 
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity authenticate(@RequestBody User user) {
-        String token = "";
+//    @RequestMapping(value = "",method = RequestMethod.POST)
+//    public String authentication(@RequestBody User user){
+//        String token;
+//        token = JwtUtil.generateToken(user);
+//        return token;
+//    }
 
+    // {"token": "<token>"}
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map> authenticate(@RequestBody User user) {
+        //1. validate username/password
+        //400 bad request
+        //2. generate token
+        //200 or 500
+        String token;
+        Map<String,String> result = new HashMap<>();
         try {
             logger.debug(user.toString());
             User u = userService.getUserByCredentials(user.getEmail(), user.getPassword());
-            if (u == null) return ResponseEntity.status(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION).body(errorMsg);
+            //u!=null
+            if (u == null){
+                result.put("msg",errorMsg);
+                return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).body(result);
+            }
             logger.debug(u.toString());
             token = JwtUtil.generateToken(u);
-        }
-        catch (Exception e) {
+            result.put("token",token);
+        } catch (Exception e) {
             String msg = e.getMessage();
             if (msg == null) msg = "BAD REQUEST!";
             logger.error(msg);
-            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(msg);
+            result.put("msg",msg);
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(result);
         }
 
-        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(result);
     }
 }
