@@ -62,6 +62,7 @@ public class SecurityFilter implements Filter {
             if (token == null || token.isEmpty()) return statusCode;
 //
             Claims claims = JwtUtil.decodeJwtToken(token);
+            //TODO pass username and check role
 //            if(claims.getId()!=null){
 //                User u = userService.getById(Long.valueOf(claims.getId()));
 //                if(u==null)  statusCode = HttpServletResponse.SC_ACCEPTED;
