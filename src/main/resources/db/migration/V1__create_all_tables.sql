@@ -12,7 +12,7 @@
 
 CREATE TABLE departments (
     /*id                INTEGER NOT NULL default nextval('department_id_seq'), */
-    id                SERIAL NOT NULL,
+    id                BIGSERIAL NOT NULL,
     name              VARCHAR(30) not null unique,
     description       VARCHAR(150),
     location          VARCHAR(100)
@@ -22,7 +22,7 @@ ALTER TABLE departments ADD CONSTRAINT department_pk PRIMARY KEY ( id );
 
 CREATE TABLE employees (
     /*id              INTEGER NOT NULL default nextval('employee_id_seq'),*/
-    id              SERIAL NOT NULL,
+    id              BIGSERIAL NOT NULL,
     name            VARCHAR(30) not null unique,
     first_name      VARCHAR(30),
     last_name       VARCHAR(30),
@@ -36,7 +36,7 @@ ALTER TABLE employees ADD CONSTRAINT employee_pk PRIMARY KEY ( id );
 
 CREATE TABLE accounts (
     /*id             INTEGER NOT NULL default nextval('account_id_seq'),*/
-    id             SERIAL NOT NULL,
+    id             BIGSERIAL NOT NULL,
     account_type   VARCHAR(30),
     balance        NUMERIC(10, 2),
     create_date    date default CURRENT_DATE,

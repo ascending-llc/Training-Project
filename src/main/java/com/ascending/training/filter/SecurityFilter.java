@@ -7,9 +7,12 @@
 
 package com.ascending.training.filter;
 
+import com.ascending.training.model.User;
+import com.ascending.training.service.UserService;
 import com.ascending.training.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -20,21 +23,24 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+//
 @WebFilter(filterName = "securityFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
 public class SecurityFilter implements Filter {
-    @Autowired private Logger logger;
+    private Logger logger=LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private UserService userService;
     private static String AUTH_URI = "/auth";
-
+//    private static String[] IGNOREURL={"/auth/*","/user"};
+//
     @Override
     public void init(FilterConfig filterConfig) {
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        if (logger == null) {
-            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
-        }
+//        if (logger == null) {
+//            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
+//        }
         HttpServletRequest req = (HttpServletRequest)request;
         int statusCode = authorization(req);
         if (statusCode == HttpServletResponse.SC_ACCEPTED) filterChain.doFilter(request, response);
@@ -44,18 +50,22 @@ public class SecurityFilter implements Filter {
     public void destroy() {
         // TODO Auto-generated method stub
     }
-
+//
     private int authorization(HttpServletRequest req) {
         int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
         String uri = req.getRequestURI();
         String verb = req.getMethod();
         if (uri.equalsIgnoreCase(AUTH_URI)) return HttpServletResponse.SC_ACCEPTED;
-
+//
         try {
             String token = req.getHeader("Authorization").replaceAll("^(.*?) ", "");
             if (token == null || token.isEmpty()) return statusCode;
-
+//
             Claims claims = JwtUtil.decodeJwtToken(token);
+//            if(claims.getId()!=null){
+//                User u = userService.getById(Long.valueOf(claims.getId()));
+//                if(u==null)  statusCode = HttpServletResponse.SC_ACCEPTED;
+//            }
             String allowedResources = "/";
             switch(verb) {
                 case "GET"    : allowedResources = (String)claims.get("allowedReadResources");   break;
@@ -74,9 +84,8 @@ public class SecurityFilter implements Filter {
             logger.debug(String.format("Verb: %s, allowed resources: %s", verb, allowedResources));
         }
         catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("can't verify the token",e);
         }
-
         return statusCode;
     }
 

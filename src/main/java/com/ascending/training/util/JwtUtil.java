@@ -62,8 +62,8 @@ public class JwtUtil {
         claims.put("allowedCreateResources", allowedCreateResources.replaceAll(".$", ""));
         claims.put("allowedUpdateResources", allowedUpdateResources.replaceAll(".$", ""));
         claims.put("allowedDeleteResources", allowedDeleteResources.replaceAll(".$", ""));
-
-        //Set the JWT Claims
+//
+//        //Set the JWT Claims
         JwtBuilder builder = Jwts.builder().setClaims(claims).signWith(signatureAlgorithm, signingKey);
 
         //Builds the JWT and serializes it to a compact, URL-safe string

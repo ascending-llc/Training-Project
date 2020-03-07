@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS users CASCADE;
 
 
 CREATE TABLE users (
-    id              SERIAL NOT NULL,
+    id              BIGSERIAL NOT NULL,
     name            VARCHAR(30) not null unique,
     password        VARCHAR(64),
     secret_key      varchar(512),
@@ -22,20 +22,20 @@ CREATE TABLE users (
 ALTER TABLE users ADD CONSTRAINT users_pk PRIMARY KEY ( id );
 
 CREATE TABLE roles (
-    id                   SERIAL NOT NULL,
+    id                   BIGSERIAL NOT NULL,
     name                 VARCHAR(30) not null unique,
     allowed_resource     VARCHAR(200),
-    allowed_read         VARCHAR(1) not null default 'N',
-    allowed_create       VARCHAR(1) not null default 'N',
-    allowed_update       VARCHAR(1) not null default 'N',
-    allowed_delete       VARCHAR(1) not null default 'N'
+    allowed_read         BOOLEAN not null default FALSE ,
+    allowed_create       BOOLEAN not null default FALSE,
+    allowed_update       BOOLEAN not null default FALSE,
+    allowed_delete       BOOLEAN not null default FALSE
 );
 
 ALTER TABLE roles ADD CONSTRAINT role_pk PRIMARY KEY ( id );
 
 CREATE TABLE users_roles (
-    user_id    INTEGER NOT NULL,
-    role_id    INTEGER NOT NULL
+    user_id    BIGINT NOT NULL,
+    role_id    BIGINT NOT NULL
 );
 
 ALTER TABLE users_roles
