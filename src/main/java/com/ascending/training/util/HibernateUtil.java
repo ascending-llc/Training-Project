@@ -8,6 +8,7 @@
 package com.ascending.training.util;
 
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+//import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -31,7 +32,9 @@ public class HibernateUtil {
     */
 
     public static SessionFactory getSessionFactory() {
+        //first time invoke
         if (sessionFactory == null) {
+            //construct session factory
             try {
                 String[] modelPackages = {"com.ascending.training.model"};
                 String dbDriver = System.getProperty("database.driver");
@@ -63,4 +66,10 @@ public class HibernateUtil {
 
         return sessionFactory;
     }
+
+//    public static void main(String[] args){
+//        SessionFactory sf = HibernateUtil.getSessionFactory();
+//        Session s = sf.openSession();
+//        Session s1 = sf.openSession();
+//    }
 }

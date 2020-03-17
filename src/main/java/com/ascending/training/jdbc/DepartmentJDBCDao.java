@@ -8,45 +8,50 @@
 package com.ascending.training.jdbc;
 
 import com.ascending.training.model.Department;
+import com.ascending.training.model.DepartmentJDBC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DepartmentDao {
+public class DepartmentJDBCDao {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     //STEP 1: Database information
-    static final String DB_URL = "jdbc:postgresql://localhost:5432/training_db";
+    static final String DBURL = "jdbc:postgresql://localhost:5431/training_dev";
     static final String USER = "admin";
-    static final String PASS = "Training123!";
+    static final String PASS = "password";
 
-    public List<Department> getDepartments() {
-        List<Department> departments = new ArrayList();
+    public List<DepartmentJDBC> getDepartments() {
+        List<DepartmentJDBC> departments = new ArrayList();
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
 
         try {
             //STEP 2: Open a connection
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            logger.debug("Connecting to database...");
+            conn = DriverManager.getConnection(DBURL, USER, PASS);
 
             //STEP 3: Execute a query
-            System.out.println("Creating statement...");
+            logger.info("Creating statement...");
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT * FROM department";
+            sql = "SELECT * FROM departments";
+            logger.warn(sql);
             rs = stmt.executeQuery(sql);
 
             //STEP 4: Extract data from result set
             while(rs.next()) {
                 //Retrieve by column name
-                int id  = rs.getInt("id");
+                Long id  = rs.getLong("id");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 String location = rs.getString("location");
 
                 //Fill the object
-                Department department = new Department();
+                DepartmentJDBC department = new DepartmentJDBC();
                 department.setId(id);
                 department.setName(name);
                 department.setDescription(description);
@@ -54,7 +59,7 @@ public class DepartmentDao {
                 departments.add(department);
             }
         }
-        catch(Exception e){
+        catch(SQLException e){
             e.printStackTrace();
         }
         finally {
@@ -70,6 +75,12 @@ public class DepartmentDao {
         }
 
         return departments;
+    }
+
+    public static void main(String[] args){
+        DepartmentJDBCDao departmentJDBCDao = new DepartmentJDBCDao();
+//        System.out.println(departmentJDBCDao.getDepartments());
+
     }
 
 }

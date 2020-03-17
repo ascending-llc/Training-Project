@@ -15,6 +15,9 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
+//domain
+//model
+//entity
 @Entity
 @Table(name = "departments")
 public class Department {
