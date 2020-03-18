@@ -51,6 +51,7 @@ public class HibernateUtil {
                 settings.put(Environment.USER, dbUser);
                 settings.put(Environment.PASS, dbPassword);
                 settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.HBM2DDL_AUTO, "validate");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
                 configuration.setProperties(settings);
 
@@ -69,7 +70,8 @@ public class HibernateUtil {
 
 //    public static void main(String[] args){
 //        SessionFactory sf = HibernateUtil.getSessionFactory();
-//        Session s = sf.openSession();
-//        Session s1 = sf.openSession();
+//        logger.info("success generate sf "+sf.hashCode());
+////        Session s = sf.openSession();
+////        Session s1 = sf.openSession();
 //    }
 }

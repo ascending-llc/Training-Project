@@ -12,13 +12,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @Table(name = "accounts")
 public class Account {
     public  Account() {}
-    public  Account(String accountType, float balance) {
+    public  Account(String accountType, BigDecimal balance) {
         this.accountType = accountType;
         this.balance = balance;
     }
@@ -33,12 +34,15 @@ public class Account {
     private String accountType;
 
     @Column(name = "balance")
-    private float balance;
+    private BigDecimal balance;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
+    //fetch_type=lazy select * from accounts
+    //HQL fetch_type=eager select a from Account a join fetch a.employee where a.employee.id=:Id
+    //native sql fetch_type=eager select * from accounts as a left join employees as e on a.employee_id=e.id where e.id=:Id
 
     public long getId() {
         return id;
@@ -54,11 +58,11 @@ public class Account {
         this.accountType = accountType;
     }
 
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -77,7 +81,7 @@ public class Account {
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
         return id == account.id &&
-                Float.compare(account.balance, balance) == 0 &&
+                account.balance.subtract(balance).equals(BigDecimal.ZERO) &&
                 accountType.equals(account.accountType);
     }
 

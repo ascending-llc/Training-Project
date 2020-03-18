@@ -18,6 +18,8 @@ public interface DepartmentDao {
     boolean delete(Department dep);
     List<Department> getDepartments();
     List<Department> getDepartmentsWithChildren();
+    Department getDepartmentEagerBy(Long id);
+    Department getDepartmentBy(Long id);
     Department getDepartmentByName(String deptName);
     Department getDepartmentAndEmployeesBy(String deptName);
     List<Object[]> getDepartmentAndEmployeesAndAccounts(String deptName);

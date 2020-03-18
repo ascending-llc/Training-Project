@@ -62,7 +62,7 @@ import org.springframework.context.annotation.Scope;
 @SpringBootApplication(scanBasePackages = {"com.ascending.training"})
 @ServletComponentScan(basePackages = {"com.ascending.training.filter"})
 public class AppInitializer extends SpringBootServletInitializer {
-
+    private Logger logger = LoggerFactory.getLogger(getClass());
     public static void main(String[] args) {
         SpringApplication.run(AppInitializer.class, args);
     }
@@ -70,6 +70,7 @@ public class AppInitializer extends SpringBootServletInitializer {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Logger logger(InjectionPoint injectionPoint) {
+        logger.debug("debug information");
         return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
 
