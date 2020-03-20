@@ -10,6 +10,9 @@ package com.ascending.training.repository;
 import com.ascending.training.init.AppInitializer;
 import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,14 +26,15 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes= AppInitializer.class)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes= AppInitializer.class)
 public class DepartmentDaoTest {
-    @Autowired
+//    @Autowired
     private DepartmentDao departmentDao;
-    @Autowired
+//    @Autowired
     private EmployeeDao employeeDao;
 //    @Autowired
 //    private Logger logger;
@@ -42,8 +46,8 @@ public class DepartmentDaoTest {
     @Before
     public void init() {
         //logic 1 save record in one side
-//        departmentDao = new DepartmentDaoImpl();
-//        employeeDao = new EmployeeDaoImpl();
+        departmentDao = new DepartmentDaoImpl();
+        employeeDao = new EmployeeDaoImpl();
         d1 = new Department();
         d1.setName(depString);
         d1.setDescription("random description");
@@ -57,15 +61,14 @@ public class DepartmentDaoTest {
         e1 = new Employee();
         e1.setName("zhang3");
         e1.setAddress("us");
-        //update employees set department_id=1 where employee.name='zhang3';
-        //e1.setDepartment_id(d1.getId);
+//        //update employees set department_id=1 where employee.name='zhang3';
+//        //e1.setDepartment_id(d1.getId);
         e1.setDepartment(d1);
         employeeDao.save(e1);
         e2 = new Employee();
         e2.setName("li4");
         e2.setDepartment(d1);
         employeeDao.save(e2);
-
     }
     @After
     public void tearDown() {
@@ -76,26 +79,42 @@ public class DepartmentDaoTest {
         departmentDao.delete(d1);
 
     }
-
-    @Test
-    public void getDepartmentAndEmployeesByTest(){
-        Department result= departmentDao.getDepartmentAndEmployeesBy(depString);
-//        assertTrue(departments.size()>0);
-//        Department result = departments.get(0);
-        assertEquals(result.getName(),depString);
-        Set<Employee> employeeSet = result.getEmployees();
-        assertEquals(employeeSet.size(),2);
-    }
+//
+//    @Test
+//    public void getDepartmentAndEmployeesByTest(){
+//        Department result= departmentDao.getDepartmentAndEmployeesBy(depString);
+////        assertTrue(departments.size()>0);
+////        Department result = departments.get(0);
+//        assertEquals(result.getName(),depString);
+//        Set<Employee> employeeSet = result.getEmployees();
+//        assertEquals(employeeSet.size(),2);
+//    }
 
     @Test
     public void getDepartmentsTest() {
         List<Department> departments = departmentDao.getDepartments();
-        int expectedNumOfDept = 5;
+        int expectedNumOfDept = 1;
 
-        departments.forEach(dept -> System.out.println(dept));
+//        departments.forEach(dept -> System.out.println(dept));
         Assert.assertEquals(expectedNumOfDept, departments.size());
     }
-//
+
+    @Test
+    public void getDepartmentEagerByTest(){
+        Department department = departmentDao.getDepartmentEagerBy(d1.getId());
+        assertNotNull(department);
+        assertEquals(department.getName(),d1.getName());
+        assertTrue(department.getEmployees().size()>0);
+    }
+
+    @Test(expected = HibernateException.class)
+    public void getDepartmentByTest(){
+        Department department = departmentDao.getDepartmentBy(d1.getId());
+        assertNotNull(department);
+        assertEquals(department.getName(),d1.getName());
+        System.out.println(department.getEmployees());
+    }
+
     @Test
     public void getDepartmentByNameTest() {
         String deptName = "HR";

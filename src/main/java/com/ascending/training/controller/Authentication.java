@@ -36,7 +36,7 @@ public class Authentication {
 //        return token;
 //    }
 
-    // {"token": "<token>"}
+    //assignment {"token": "<token>"}
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map> authenticate(@RequestBody User user) {
         //1. validate username/password

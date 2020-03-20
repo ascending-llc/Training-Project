@@ -20,22 +20,30 @@ import java.util.List;
 
 public class HibernateMappingTest {
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    //    @Test
+//    public void mappingTest() {
+//        String hql = "FROM Department";
+//        List<Department> departments = null;
+//
+//        try (
+//            Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            Query<Department> query = session.createQuery(hql);
+//            departments = query.list();
+//        }
+//        catch (Exception e) {
+//            logger.error(e.getMessage());
+//        }
+//
+//        departments.forEach(dept -> logger.info(dept.toString()));
+//
+//        Assert.assertNotNull(departments);
+//    }
     @Test
-    public void mappingTest() {
-        String hql = "FROM Department";
-        List<Department> departments = null;
-
-        try (
-            Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Department> query = session.createQuery(hql);
-            departments = query.list();
+    public void mappingClassTest() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Department department = session.get(Department.class, 1L);
+            Assert.assertNotNull(department);
         }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-
-        departments.forEach(dept -> logger.info(dept.toString()));
-
-        Assert.assertNotNull(departments);
     }
 }
