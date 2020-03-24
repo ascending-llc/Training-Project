@@ -24,7 +24,8 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Repository
+@Repository
+//DepartmentDao dd = new DepartmentDaoImpl();
 public class DepartmentDaoImpl implements DepartmentDao {
 //    @Autowired private Logger logger;
     private Logger logger = LoggerFactory.getLogger(getClass());

@@ -58,7 +58,7 @@ import org.springframework.context.annotation.Scope;
     -Dserver.port=8080 \
     -Dsecret.key=Training123!
  */
-
+//AppBootstrap
 @SpringBootApplication(scanBasePackages = {"com.ascending.training"})
 @ServletComponentScan(basePackages = {"com.ascending.training.filter"})
 public class AppInitializer extends SpringBootServletInitializer {
@@ -73,14 +73,6 @@ public class AppInitializer extends SpringBootServletInitializer {
         logger.debug("debug information");
         return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
-
-//    @Bean
-//    public DepartmentService getDepartmentService(){
-//        DepartmentService ds = new DepartmentService();
-//        ds.setPropert (xxx);
-//        ds.setPropert(yyy);
-//        return ds;
-//    }
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)

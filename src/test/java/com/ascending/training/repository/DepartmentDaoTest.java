@@ -24,17 +24,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Set;
-
+//import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(classes= AppInitializer.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes= AppInitializer.class)
 public class DepartmentDaoTest {
-//    @Autowired
+    @Autowired
     private DepartmentDao departmentDao;
-//    @Autowired
+    @Autowired
     private EmployeeDao employeeDao;
 //    @Autowired
 //    private Logger logger;
@@ -46,8 +46,8 @@ public class DepartmentDaoTest {
     @Before
     public void init() {
         //logic 1 save record in one side
-        departmentDao = new DepartmentDaoImpl();
-        employeeDao = new EmployeeDaoImpl();
+//        departmentDao = new DepartmentDaoImpl();
+//        employeeDao = new EmployeeDaoImpl();
         d1 = new Department();
         d1.setName(depString);
         d1.setDescription("random description");

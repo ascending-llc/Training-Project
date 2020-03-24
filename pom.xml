@@ -76,13 +76,13 @@
       <artifactId>fluent-hibernate-core</artifactId>
       <version>0.3.1</version>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.26</version>
-    </dependency>
-    -->
+
+    <!--<dependency>-->
+      <!--<groupId>org.slf4j</groupId>-->
+      <!--<artifactId>slf4j-simple</artifactId>-->
+      <!--<version>1.7.26</version>-->
+    <!--</dependency>-->
+
     <!--<dependency>-->
       <!--<groupId>com.fasterxml.jackson.core</groupId>-->
       <!--<artifactId>jackson-databind</artifactId>-->
@@ -105,7 +105,7 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
-      <version>1.11.714</version>
+      <version>1.11.747</version>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
