@@ -17,7 +17,7 @@ public interface DepartmentDao {
     boolean delete(String deptName);
     boolean delete(Department dep);
     List<Department> getDepartments();
-    List<Department> getDepartmentsWithChildren();
+    List<Department> getDepartmentsEager();
     Department getDepartmentEagerBy(Long id);
     Department getDepartmentBy(Long id);
     Department getDepartmentByName(String deptName);

@@ -32,7 +32,7 @@ public class DepartmentController {
     ///departments/with-children  GET
     @RequestMapping(value = "/with-children", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
     public List<Department> getDepartmentsWithChildren() {
-        List<Department> departments = departmentService.getDepartmentsWithChildren();
+        List<Department> departments = departmentService.getDepartmentsEager();
         return departments;
     }
 

@@ -166,7 +166,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
         }
     }
 
-    public List<Department> getDepartmentsWithChildren() {
+    public List<Department> getDepartmentsEager() {
         String hql = "FROM Department as dept left join fetch dept.employees as em left join fetch em.accounts";
         //String hql = "FROM Department as dept left join fetch dept.employees";
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

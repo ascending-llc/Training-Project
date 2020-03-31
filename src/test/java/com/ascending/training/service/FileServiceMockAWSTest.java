@@ -47,7 +47,8 @@ public class FileServiceMockAWSTest {
      *  We can also use constructor injection to inject mocked and real objects into the FileService
      */
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private AmazonS3 amazonS3;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private AmazonS3 amazonS3;
     @Autowired
     @Mock
     private Logger logger;  //autowired the logger and inject it into the object fileService

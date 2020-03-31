@@ -38,8 +38,8 @@ public class DepartmentService {
     public List<Department> getDepartments() {
         return departmentDao.getDepartments();
     }
-    public List<Department> getDepartmentsWithChildren() {
-        return departmentDao.getDepartmentsWithChildren();
+    public List<Department> getDepartmentsEager() {
+        return departmentDao.getDepartmentsEager();
     }
 
     public Department getDepartmentByName(String deptName) {
