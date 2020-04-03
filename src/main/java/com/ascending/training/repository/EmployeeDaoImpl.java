@@ -11,6 +11,7 @@ import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
 import com.ascending.training.util.HibernateUtil;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -24,6 +25,23 @@ import java.util.List;
 public class EmployeeDaoImpl implements EmployeeDao {
     @Autowired private Logger logger;
     @Autowired private DepartmentDao departmentDao;
+
+    @Override
+    public Employee getBy(Long id) {
+        String hql = "FROM Employee e where e.id=:Id";
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            Query<Employee> query = session.createQuery(hql);
+            query.setParameter("Id",id);
+            Employee result = query.uniqueResult();
+            session.close();
+            return result;
+        }catch (HibernateException e) {
+            logger.error("failure to retrieve data record", e);
+            session.close();
+            return null;
+        }
+    }
 
     @Override
     public Employee save(Employee employee, String deptName) {
@@ -54,10 +72,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Employee save(Employee employee) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                transaction = session.beginTransaction();
-                session.save(employee);
-                transaction.commit();
-                return employee;
+            transaction = session.beginTransaction();
+            session.save(employee);
+            transaction.commit();
+            return employee;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             logger.error("The employee is not able to be saved",e);
@@ -86,7 +104,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return false;
     }
 
-//    @Override
+    //    @Override
 //    public int updateEmployeeAddress(String name, String address) {
 //        String hql = "UPDATE Employee as em set em.address = :address where em.name = :name";
 //        int updatedCount = 0;

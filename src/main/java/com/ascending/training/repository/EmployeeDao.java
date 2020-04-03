@@ -12,6 +12,7 @@ import com.ascending.training.model.Employee;
 import java.util.List;
 
 public interface EmployeeDao {
+    Employee getBy(Long id);
     Employee save(Employee employee, String deptName);
     Employee save(Employee employee);
     boolean delete(Employee employee);

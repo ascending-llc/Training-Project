@@ -30,7 +30,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Employee getEmployee(@PathVariable("id") Long id) {
-        return employeeService.getEmployeeById(id);
+        return employeeService.getBy(id);
     }
 
 

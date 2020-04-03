@@ -19,6 +19,10 @@ public class EmployeeService {
     @Autowired
     private EmployeeDao employeeDao;
 
+    public Employee getBy(Long id){
+        return employeeDao.getBy(id);
+    }
+
     public Employee save(Employee employee, String deptName) {
         return employeeDao.save(employee, deptName);
     }
