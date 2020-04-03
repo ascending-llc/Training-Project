@@ -19,8 +19,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/departments", "/depts"})
 public class DepartmentController {
-    @Autowired private Logger logger;
-    @Autowired private DepartmentService departmentService;
+    @Autowired
+    private Logger logger;
+    @Autowired
+    private DepartmentService departmentService;
 
     // /departments GET   /dep
     @RequestMapping(value = "", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
@@ -36,11 +38,33 @@ public class DepartmentController {
         return departments;
     }
 
-    @RequestMapping(value = "/{deptName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Department getDepartment(@PathVariable String deptName) {
-        Department department = departmentService.getDepartmentByName(deptName);
-        return department;
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Department updateDepartmentName(@PathVariable("id") Long Id, @RequestParam("name") String name) {
+        logger.info("pass in variable id: "+Id.toString()+"name: "+name);
+        Department d = departmentService.getBy(Id);
+        d.setName(name);
+        d = departmentService.update(d);
+        return d;
     }
+
+    //{prefix}/department?name=xxx
+    @RequestMapping(value="",method=RequestMethod.GET,params = {"name"})
+    public Department getDepartment(@RequestParam("name") String name){
+        logger.info("pass in variable name: "+name);
+        return null;
+    }
+    //{prefix}/department?description=xxx
+    @RequestMapping(value="",method=RequestMethod.GET,params = {"description"})
+    public Department getDepartmentByDesc(@RequestParam("description") String description){
+        logger.info("pass in variable description: "+description);
+        return null;
+    }
+//    id=xadsfadsl12341234cvasdf
+//    @RequestMapping(value = "/{deptName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public Department getDepartment(@PathVariable String deptName) {
+//        Department department = departmentService.getDepartmentByName(deptName);
+//        return department;
+//    }
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Department creatDepartment(@RequestBody Department department) {
@@ -48,7 +72,7 @@ public class DepartmentController {
         String msg = "The department was created.";
         Department dep = departmentService.save(department);
 
-        if (dep==null) msg = "The department was not created.";
+        if (dep == null) msg = "The department was not created.";
 
         return dep;
     }
@@ -58,7 +82,7 @@ public class DepartmentController {
         logger.debug("Department: " + department.toString());
         String msg = "The department was updated.";
         Department dep = departmentService.update(department);
-        if (dep==null) msg = "The department was not update.";
+        if (dep == null) msg = "The department was not update.";
 
         return dep;
     }

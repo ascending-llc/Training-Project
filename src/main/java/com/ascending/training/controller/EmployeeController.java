@@ -27,10 +27,17 @@ public class EmployeeController {
         return employeeService.getEmployees();
     }
 
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Employee getEmployee(@PathVariable String name) {
-        return employeeService.getEmployeeByName(name);
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Employee getEmployee(@PathVariable("id") Long id) {
+        return employeeService.getEmployeeById(id);
     }
+
+
+//    @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public Employee getEmployee(@PathVariable String name) {
+//        return employeeService.getEmployeeByName(name);
+//    }
 
     @RequestMapping(value = "/{deptName}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Employee creatEmployee(@RequestBody Employee employee, @PathVariable String deptName) {

@@ -16,7 +16,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @WebFilter(filterName = "logFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
@@ -24,7 +26,7 @@ public class LogFilter implements Filter {
 //    @Autowired private Logger logger;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final List<String> excludedWords = Arrays.asList("newPasswd", "confirmPasswd", "passwd", "password");
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss,SSS");
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -35,11 +37,12 @@ public class LogFilter implements Filter {
 //        if (logger == null) {
 //            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
 //        }
-        long startTime = System.currentTimeMillis();
+        Instant startTime = Instant.now();
         HttpServletRequest req = (HttpServletRequest)request;
         String logInfo = logInfo(req);
-        logger.info(logInfo.replace("responseTime", String.valueOf(System.currentTimeMillis() - startTime)));
         filterChain.doFilter(request, response);
+        //todo change to ms
+        logger.info(logInfo.replace("responseTime", String.valueOf(Instant.now().getEpochSecond() - startTime.getEpochSecond())));
     }
 
     public void destroy() {
@@ -58,7 +61,7 @@ public class LogFilter implements Filter {
         String formData = null;
         String httpMethod = req.getMethod();
 
-        Date startDateTime = new Date();
+        LocalDateTime startDateTime = LocalDateTime.now();
         String requestURL = req.getRequestURI();
         String userIP = req.getRemoteHost();
         String sessionID = req.getSession().getId();

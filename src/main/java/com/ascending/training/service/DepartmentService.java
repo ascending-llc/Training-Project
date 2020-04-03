@@ -35,6 +35,10 @@ public class DepartmentService {
         return departmentDao.delete(deptName);
     }
 
+    public Department getBy(Long Id) {
+        return departmentDao.getBy(Id);
+    }
+
     public List<Department> getDepartments() {
         return departmentDao.getDepartments();
     }

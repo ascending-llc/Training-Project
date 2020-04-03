@@ -150,7 +150,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             return null;
         }
     }
-    public Department getDepartmentBy(Long id){
+    public Department getBy(Long id){
         String hql = "FROM Department d where d.id=:Id";
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {

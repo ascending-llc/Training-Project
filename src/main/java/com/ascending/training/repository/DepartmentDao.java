@@ -19,7 +19,7 @@ public interface DepartmentDao {
     List<Department> getDepartments();
     List<Department> getDepartmentsEager();
     Department getDepartmentEagerBy(Long id);
-    Department getDepartmentBy(Long id);
+    Department getBy(Long id);
     Department getDepartmentByName(String deptName);
     Department getDepartmentAndEmployeesBy(String deptName);
     List<Object[]> getDepartmentAndEmployeesAndAccounts(String deptName);

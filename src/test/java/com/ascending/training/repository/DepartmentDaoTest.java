@@ -109,7 +109,7 @@ public class DepartmentDaoTest {
 
     @Test(expected = HibernateException.class)
     public void getDepartmentByTest(){
-        Department department = departmentDao.getDepartmentBy(d1.getId());
+        Department department = departmentDao.getBy(d1.getId());
         assertNotNull(department);
         assertEquals(department.getName(),d1.getName());
         System.out.println(department.getEmployees());
