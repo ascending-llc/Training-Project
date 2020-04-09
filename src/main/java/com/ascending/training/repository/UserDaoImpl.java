@@ -67,7 +67,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByCredentials(String email, String password) throws Exception {
-        String hql = "FROM User as u where lower(u.email) = :email and u.password = :password";
+        String hql = "FROM User as u where (lower(u.email) = :email or lower(u.name) =:email) and u.password = :password";
         logger.debug(String.format("User email: %s, password: %s", email, password));
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

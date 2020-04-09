@@ -71,7 +71,10 @@ public class User {
     public String getPassword() {
         return password;
     }
-
+    //User u = new User()
+    //String digestPassword=DigestUtils.md5Hex(password.trim());
+    //u.setPassword(digestPassword)
+    //session.save(u)
     public void setPassword(String password) {
         this.password = DigestUtils.md5Hex(password.trim());
     }

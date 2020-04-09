@@ -3,6 +3,7 @@ package com.ascending.training.service;
 
 import com.ascending.training.init.AppInitializer;
 import com.ascending.training.model.User;
+import io.jsonwebtoken.Claims;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,16 @@ public class JWTServiceTest {
         assertNotNull(token);
         String[] tArray = token.split("\\.");
         assertEquals(tArray.length,3);
+    }
+
+    @Test
+    public void decryptJwtTokenTest(){
+        User u = new User();
+        u.setId(1L);
+        u.setName("ryohang");
+        String token = jwtService.generateToken(u);
+        Claims c = jwtService.decryptJwtToken(token);
+        String username = c.getSubject();
+        assertEquals(u.getName(),username);
     }
 }

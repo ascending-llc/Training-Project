@@ -21,6 +21,8 @@ import java.util.Map;
 public class MessageService {
     @Autowired
     private Logger logger;
+    //autowire mocksqs in unit environment
+    //autowire true sqsobject
     @Autowired
     private AmazonSQS amazonSQS;
 

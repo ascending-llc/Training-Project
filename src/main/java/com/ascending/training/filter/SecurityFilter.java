@@ -8,6 +8,7 @@
 package com.ascending.training.filter;
 
 import com.ascending.training.model.User;
+import com.ascending.training.service.JWTService;
 import com.ascending.training.service.UserService;
 import com.ascending.training.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -30,6 +31,8 @@ public class SecurityFilter implements Filter {
     @Autowired
     private UserService userService;
     private static String AUTH_URI = "/auth";
+    @Autowired
+    private JWTService jwtService;
 //    private static String[] IGNOREURL={"/auth/*","/user"};
 //
     @Override
@@ -61,12 +64,13 @@ public class SecurityFilter implements Filter {
             String token = req.getHeader("Authorization").replaceAll("^(.*?) ", "");
             if (token == null || token.isEmpty()) return statusCode;
 //
-            Claims claims = JwtUtil.decodeJwtToken(token);
+            Claims claims = jwtService.decryptJwtToken(token);
             //TODO pass username and check role
-//            if(claims.getId()!=null){
-//                User u = userService.getById(Long.valueOf(claims.getId()));
+            if(claims.getId()!=null){
+                User u = userService.getById(Long.valueOf(claims.getId()));
+                if(u==null) return statusCode;
 //                if(u==null)  statusCode = HttpServletResponse.SC_ACCEPTED;
-//            }
+            }
             String allowedResources = "/";
             switch(verb) {
                 case "GET"    : allowedResources = (String)claims.get("allowedReadResources");   break;

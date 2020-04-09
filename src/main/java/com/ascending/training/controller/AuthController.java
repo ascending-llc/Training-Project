@@ -8,13 +8,16 @@
 package com.ascending.training.controller;
 
 import com.ascending.training.model.User;
+import com.ascending.training.service.JWTService;
 import com.ascending.training.service.UserService;
-import com.ascending.training.util.JwtUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -22,9 +25,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = {"/auth"})
-public class Authentication {
+public class AuthController {
     @Autowired private Logger logger;
     @Autowired private UserService userService;
+    @Autowired private JWTService jwtService;
     private String errorMsg = "The email or password is not correct.";
     private String tokenKeyWord = "Authorization";
     private String tokenType = "Bearer";
@@ -54,7 +58,7 @@ public class Authentication {
                 return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).body(result);
             }
             logger.debug(u.toString());
-            token = JwtUtil.generateToken(u);
+            token = jwtService.generateToken(u);
             result.put("token",token);
         } catch (Exception e) {
             String msg = e.getMessage();
