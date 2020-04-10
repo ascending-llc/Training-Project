@@ -1,4 +1,6 @@
-# ASCENDING Training course by Liwei Wang
+# ASCENDING Training course by Liwei Wang & Ryo Hang
+## Description
+This is a sample project for [ASCENDING](https://www.ascendingdc.com/services/training) java back-end SDE training.
 
 # Branch information
 
@@ -14,6 +16,32 @@
 Uses flyway as migration tool
 
 mvn clean compile flyway:clean flyway:migrate -Ddatabase_url=localhost:port/your_database -Ddatabase_user=your_username -Ddatabase_password=your_password
+
+# For student README instruction
+## Description
+## Assumption
+## Approach
+## Build Project
+1. Clone a project
+    ``` bash
+    git clone https://github.com/xchris1015/basketball
+    ```
+2. xxxx
+    ```java
+    public class Bike{
+       private String wheelShape;
+    }
+    ```
+### compile
+### test
+### run migration
+### package
+
+## API guildline
+
+### screenshot
+![API screenshot](https://github.com/xchris1015/basketball/blob/master/ReadmePicture/findByUsername.png)
+
 
 # About ASCENDING
 
