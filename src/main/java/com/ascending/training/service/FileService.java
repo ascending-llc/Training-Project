@@ -12,9 +12,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.google.common.io.Files;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +31,18 @@ import java.util.UUID;
 public class FileService {
     @Autowired
     private Logger logger;
-    @Autowired
+//    @Autowired
     private AmazonS3 amazonS3;
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
+
+    public FileService(@Autowired AmazonS3 amazonS3){
+        this.amazonS3=amazonS3;
+    }
+
+    public String uploadFile(MultipartFile file) throws IOException {
+        return uploadFile(bucketName,file);
+    }
 
     /*
      * MultipartFile is a representation of an uploaded file received in a multipart request.
@@ -41,30 +51,29 @@ public class FileService {
      */
     public String uploadFile(String bucketName, MultipartFile file) throws IOException {
         try {
-            if (amazonS3.doesObjectExist(bucketName, file.getOriginalFilename())) {
-                logger.info(String.format("The file '%s' exists in the bucket %s", file.getName(), bucketName));
-                return null;
-            }
-//            amazonS3.putObject(bucketName,file.getName(),file);
             String uuid = UUID.randomUUID().toString();
-            //ryohang.png-> ryohang.png+adafsdfalzcvdf bad
-            //ryohang+2345badff.png good
+//            //ryohang.png-> ryohang.png+adafsdfalzcvdf bad
+//            //ryohang+2345badff.png good
             String originalFilename = file.getOriginalFilename();
-            String newFileName = Files.getNameWithoutExtension(originalFilename)+uuid+Files.getFileExtension(originalFilename);
+            String newFileName = uuid+"."+Files.getFileExtension(originalFilename);
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(file.getContentType());
             objectMetadata.setContentLength(file.getSize());
             amazonS3.putObject(bucketName, newFileName, file.getInputStream(), objectMetadata);
-            logger.info(String.format("The file name=%s, size=%d was uploaded to bucket %s", file.getName(), bucketName));
+            logger.info(String.format("The file name=%s was uploaded to bucket %s", newFileName, bucketName));
+            //return getFileUrl(bucketName, file.getName());
+            return newFileName;
         }
         catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
 
-        return getFileUrl(bucketName, file.getName());
     }
 
+    public String getFileUrl(String fileName) {
+        return getFileUrl(bucketName,fileName);
+    }
 
     public String getFileUrl(String bucketName, String fileName) {
         LocalDateTime expiration = LocalDateTime.now().plusDays(1);
@@ -79,21 +88,21 @@ public class FileService {
         if (!amazonS3.doesBucketExistV2(bucketName)) amazonS3.createBucket(bucketName);
     }
 
-    public boolean saveFile(MultipartFile multipartFile, String filePath) {
-        boolean isSuccess = false;
-
-        try {
-            File directory = new File(filePath);
-            if (!directory.exists()) directory.mkdir();
-            Path path = Paths.get(filePath, multipartFile.getOriginalFilename());
-            multipartFile.transferTo(path);
-            isSuccess = true;
-            logger.info(String.format("The file %s is saved in the foldr %s", multipartFile.getOriginalFilename(), filePath));
-        }
-        catch(Exception e) {
-            logger.error(e.getMessage());
-        }
-
-        return isSuccess;
-    }
+//    public boolean saveFile(MultipartFile multipartFile, String filePath) {
+//        boolean isSuccess = false;
+//
+//        try {
+//            File directory = new File(filePath);
+//            if (!directory.exists()) directory.mkdir();
+//            Path path = Paths.get(filePath, multipartFile.getOriginalFilename());
+//            multipartFile.transferTo(path);
+//            isSuccess = true;
+//            logger.info(String.format("The file %s is saved in the foldr %s", multipartFile.getOriginalFilename(), filePath));
+//        }
+//        catch(Exception e) {
+//            logger.error(e.getMessage());
+//        }
+//
+//        return isSuccess;
+//    }
 }

@@ -23,10 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -52,11 +49,12 @@ public class FileServiceMockAWSTest {
     @Autowired
     @Mock
     private Logger logger;  //autowired the logger and inject it into the object fileService
+    @Autowired
     @InjectMocks
     private FileService fileService;  //fileService is not mocked object
 
     private String bucketName = "training_queue_ascending_com";
-    private String fileName = "test.txt";
+    private String fileName = "testFile.txt";
     private URL fakeFileUrl;
     private MultipartFile multipartFile;
     private String path;
@@ -68,12 +66,12 @@ public class FileServiceMockAWSTest {
         //Mocks are initialized before each test method
         MockitoAnnotations.initMocks(this);
 
-        fakeFileUrl = new URL("http://www.fakeQueueUrl.com/abc/123/fake");
-        File file = new File("/Users/liweiwang/ascending/lecture/README.md");
-        FileInputStream input = new FileInputStream(file);
-        multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input));
-        path = System.getProperty("user.dir") + File.separator + "temp";
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        multipartFile = new MockMultipartFile("file", fileName, "text/plain", input);
+//        multipartFile = new MockMultipartFile("file", fileName, "text/plain", IOUtils.toByteArray(input));
+//        path = System.getProperty("user.dir") + File.separator + "temp";
 
+        fakeFileUrl = new URL("https://www.ascendingdc.com");
         //Stubbing for the method doesObjectExist and generatePresignedUrl
         when(amazonS3.doesObjectExist(anyString(), anyString())).thenReturn(false);
         when(amazonS3.generatePresignedUrl(any())).thenReturn(fakeFileUrl);
@@ -94,34 +92,34 @@ public class FileServiceMockAWSTest {
     @Test
     public void uploadFile() throws IOException{
         fileService.uploadFile(bucketName, multipartFile);
-        verify(amazonS3, times(1)).doesObjectExist(anyString(), anyString());
+//        verify(amazonS3, times(1)).doesObjectExist(anyString(), anyString());
         verify(amazonS3, times(1)).putObject(anyString(), anyString(), any(), any());
     }
 
-    @Test
-    public void saveFile() throws IOException, FileNotFoundException {
-        //Dummies
-        MultipartFile multipartFile = new MockMultipartFile(" ", new byte[1]);
-        String path = " ";
-
-        //Annotation @Mock can only be used for calls variables
-        //create mocked object fshttps://tomcat.apache.org/download-80.cgi
-        FileService fs = Mockito.mock(FileService.class);
-
-        //Stubbing
-        //when(fs.saveFile(any(), anyString())).thenReturn(true);
-        doReturn(true).when(fs).saveFile(any(), anyString());
-
-        //Exercise - call method
-        //Use dummies as parameters
-        boolean isSuccess = fs.saveFile(multipartFile, path);
-
-        //Verify state
-        Assert.assertTrue(isSuccess);
-
-        //Verify behavior
-        verify(fs, times(1)).saveFile(any(), anyString());
-    }
+//    @Test
+//    public void saveFile() throws IOException, FileNotFoundException {
+//        //Dummies
+//        MultipartFile multipartFile = new MockMultipartFile(" ", new byte[1]);
+//        String path = " ";
+//
+//        //Annotation @Mock can only be used for calls variables
+//        //create mocked object fshttps://tomcat.apache.org/download-80.cgi
+//        FileService fs = Mockito.mock(FileService.class);
+//
+//        //Stubbing
+//        //when(fs.saveFile(any(), anyString())).thenReturn(true);
+//        doReturn(true).when(fs).saveFile(any(), anyString());
+//
+//        //Exercise - call method
+//        //Use dummies as parameters
+//        boolean isSuccess = fs.saveFile(multipartFile, path);
+//
+//        //Verify state
+//        Assert.assertTrue(isSuccess);
+//
+//        //Verify behavior
+//        verify(fs, times(1)).saveFile(any(), anyString());
+//    }
 
 }
 

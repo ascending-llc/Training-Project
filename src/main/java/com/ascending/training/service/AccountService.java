@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service//AccountService accountService = new AccountService();
 public class AccountService {
     @Autowired private AccountDao accountDao;
 

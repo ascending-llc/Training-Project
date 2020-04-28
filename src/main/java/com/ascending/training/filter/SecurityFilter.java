@@ -41,9 +41,9 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-//        if (logger == null) {
-//            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
-//        }
+        if (userService == null) {
+            SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
+        }
         HttpServletRequest req = (HttpServletRequest)request;
         int statusCode = authorization(req);
         if (statusCode == HttpServletResponse.SC_ACCEPTED) filterChain.doFilter(request, response);
