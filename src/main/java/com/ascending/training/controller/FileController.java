@@ -49,32 +49,9 @@ public class FileController {
         return null;
     }
 
-//        refactor
-//        file upload return url
-//        file download -> getUrl
-    @RequestMapping(value = "/{bucketName}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity uploadFile(@PathVariable String bucketName, @RequestParam("file") MultipartFile file) {
-        String msg = String.format("The file name=%s, size=%d could not be uploaded.", file.getOriginalFilename(), file.getSize());
-        ResponseEntity responseEntity = ResponseEntity.status(HttpServletResponse.SC_NOT_ACCEPTABLE).body(msg);
-        try {
-            String url = fileService.uploadFile(file);
-            if (url != null) {
-                msg = String.format("The file name=%s, size=%d was uploaded, url=%s", file.getOriginalFilename(), file.getSize(), url);
-                messageService.sendMessage(queueName, url);
-                responseEntity = ResponseEntity.status(HttpServletResponse.SC_OK).body(msg);
-            }
-            logger.info(msg);
-        }
-        catch (Exception e) {
-            responseEntity = ResponseEntity.status(HttpServletResponse.SC_NOT_ACCEPTABLE).body(e.getMessage());
-            logger.error(e.getMessage());
-        }
-
-        return responseEntity;
-    }
-
     @RequestMapping(value = "/{fileName}", method = RequestMethod.GET)
-    public ResponseEntity<String> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+    public ResponseEntity<String> getFileUrl(@PathVariable String fileName, HttpServletRequest request) {
+//        request.getSession()
         Resource resource = null;
         String msg = "The file doesn't exist.";
         ResponseEntity responseEntity;
@@ -91,6 +68,28 @@ public class FileController {
 
         return responseEntity;
     }
+
+
+//    @RequestMapping(value = "/{bucketName}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity uploadFile(@PathVariable String bucketName, @RequestParam("file") MultipartFile file) {
+//        String msg = String.format("The file name=%s, size=%d could not be uploaded.", file.getOriginalFilename(), file.getSize());
+//        ResponseEntity responseEntity = ResponseEntity.status(HttpServletResponse.SC_NOT_ACCEPTABLE).body(msg);
+//        try {
+//            String url = fileService.uploadFile(file);
+//            if (url != null) {
+//                msg = String.format("The file name=%s, size=%d was uploaded, url=%s", file.getOriginalFilename(), file.getSize(), url);
+//                messageService.sendMessage(queueName, url);
+//                responseEntity = ResponseEntity.status(HttpServletResponse.SC_OK).body(msg);
+//            }
+//            logger.info(msg);
+//        }
+//        catch (Exception e) {
+//            responseEntity = ResponseEntity.status(HttpServletResponse.SC_NOT_ACCEPTABLE).body(e.getMessage());
+//            logger.error(e.getMessage());
+//        }
+//
+//        return responseEntity;
+//    }
 
 //    @RequestMapping(value = "/{fileName}", method = RequestMethod.GET, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
 //    public ResponseEntity<Object> downloadFile(@PathVariable String fileName, HttpServletRequest request) {

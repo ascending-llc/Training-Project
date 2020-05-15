@@ -23,6 +23,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 //
 @WebFilter(filterName = "securityFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
@@ -45,6 +46,8 @@ public class SecurityFilter implements Filter {
             SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, request.getServletContext());
         }
         HttpServletRequest req = (HttpServletRequest)request;
+//        HttpSession session = req.getSession();
+//        session.setAttribute("appUserId",51234);
         int statusCode = authorization(req);
         if (statusCode == HttpServletResponse.SC_ACCEPTED) filterChain.doFilter(request, response);
         else ((HttpServletResponse)response).sendError(statusCode);

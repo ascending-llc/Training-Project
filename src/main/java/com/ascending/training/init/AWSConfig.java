@@ -25,9 +25,9 @@ public class AWSConfig {
 //    }
 
 //    @Bean
-//    public File2Service getFile2Service(){
+//    public FileService getFile2Service(){
 //        AmazonS3 s3Client = AmazonS3ClientBuilder.standard().build();
-//        File2Service file2Service = new File2Service(s3Client);
+//        FileService file2Service = new FileService(s3Client);
 //        file2Service.setBucketName("car-service-dev");
 //        return file2Service;
 //    }

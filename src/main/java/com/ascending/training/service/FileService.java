@@ -14,20 +14,18 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-@Service
+@Service //new FileService(amazonS3);
 public class FileService {
     @Autowired
     private Logger logger;
@@ -36,9 +34,15 @@ public class FileService {
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
+    //constructor DI
     public FileService(@Autowired AmazonS3 amazonS3){
         this.amazonS3=amazonS3;
     }
+
+    //setter based DI
+    //    public void setAmazonS3(@Autowired AmazonS3 amazonS3) {
+    //        this.amazonS3 = amazonS3;
+    //    }
 
     public String uploadFile(MultipartFile file) throws IOException {
         return uploadFile(bucketName,file);
