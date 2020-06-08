@@ -13,13 +13,13 @@ import java.util.List;
 
 public interface DepartmentDao {
     Department save(Department department);
+    List<Department> getDepartments();
+    Department getBy(Long id);
+    boolean delete(Department dep);
     Department update(Department department);
     boolean delete(String deptName);
-    boolean delete(Department dep);
-    List<Department> getDepartments();
     List<Department> getDepartmentsEager();
     Department getDepartmentEagerBy(Long id);
-    Department getBy(Long id);
     Department getDepartmentByName(String deptName);
     Department getDepartmentAndEmployeesBy(String deptName);
     List<Object[]> getDepartmentAndEmployeesAndAccounts(String deptName);
