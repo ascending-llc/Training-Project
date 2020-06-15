@@ -11,37 +11,48 @@ This is a sample project for [ASCENDING](https://www.ascendingdc.com/services/tr
 * [jwt_branch](https://github.com/daveywang/Training-Project/tree/jwt) maintains security implementation
 * [aws-s3-sqs_branch](https://github.com/daveywang/Training-Project/tree/aws-s3-sqs)  maintains aws and third party implementation
 
-# Database Migration
+## Configure local environment
+### setup local database with docker 
+Refer postgres docker [image](https://hub.docker.com/_/postgres) for environment option.
+```
+docker run --name ${PostgresContainerName} -e POSTGRES_USER=${username} -e POSTGRES_PASSWORD=${password} -e POSTGRES_DB=${databaseName} -p ${hostport}:${containerport} -d postgres
+```
+### migrate database schema
+Refer to flyway setup [documentation](https://flywaydb.org/documentation/migrations), find all [migration schema](src/main/resources/db/migrate)
+ ```xml
+      <plugin>
+          <groupId>org.flywaydb</groupId>
+          <artifactId>flyway-maven-plugin</artifactId>
+          <version>${flyway.version}</version>
+          <configuration>
+            <driver>org.postgresql.Driver</driver>
+            <url>jdbc:postgresql://localhost:5431/databaseName</url>
+            <user>admin</user>
+            <password>password</password>
+            <schemas>
+               <schema>public</schema>
+            </schemas>
+          </configuration>
+       </plugin>
+  ```
 
-Uses flyway as migration tool
-
+```
 mvn clean compile flyway:clean flyway:migrate -Ddatabase_url=localhost:port/your_database -Ddatabase_user=your_username -Ddatabase_password=your_password
+```  
 
-# For student README instruction
-## Description
-## Assumption
-## Approach
-## Build Project
-1. Clone a project
-    ``` bash
-    git clone https://github.com/xchris1015/basketball
+### runtime environment variable
+ ```
+        -Ddatabase.driver=org.postgresql.Driver
+        -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect
+        -Ddatabase.url=jdbc:postgresql://localhost:5431/databaseName
+        -Ddatabase.user=admin
+        -Ddatabase.password=password
+        -Daws.accessKeyId=AWS accesskey
+        -Daws.secretKey=AWS secretKey
+        -Dspring.profiles.active=dev
+        -Daws.s3.bucketName=my own bucket name
+        -Daws.sqs.name=my own queue name
     ```
-2. xxxx
-    ```java
-    public class Bike{
-       private String wheelShape;
-    }
-    ```
-### compile
-### test
-### run migration
-### package
-
-## API guildline
-
-### screenshot
-![API screenshot](https://github.com/xchris1015/basketball/blob/master/ReadmePicture/findByUsername.png)
-
 
 # About ASCENDING
 

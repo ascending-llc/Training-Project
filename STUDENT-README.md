@@ -22,3 +22,29 @@ Refer to flyway setup [documentation](https://flywaydb.org/documentation/migrati
 ```
 mvn clean compile flyway:migrate
 ```  
+
+
+# For student README instruction
+## Description
+## Assumption
+## Approach
+## Build Project
+1. Clone a project
+    ``` bash
+    git clone https://github.com/xchris1015/basketball
+    ```
+2. xxxx
+    ```java
+    public class Bike{
+       private String wheelShape;
+    }
+    ```
+### compile
+### test
+### run migration
+### package
+
+## API guildline
+
+### screenshot
+![API screenshot](https://github.com/xchris1015/basketball/blob/master/ReadmePicture/findByUsername.png)
