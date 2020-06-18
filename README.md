@@ -50,8 +50,10 @@ mvn clean compile flyway:clean flyway:migrate -Ddatabase_url=localhost:port/your
         -Daws.accessKeyId=AWS accesskey
         -Daws.secretKey=AWS secretKey
         -Dspring.profiles.active=dev
-        -Daws.s3.bucketName=my own bucket name
+        -Daws.s3.bucket=my own bucket name
+        -Daws.region=my own region
         -Daws.sqs.name=my own queue name
+        -Dsecret.key=any random key string
     ```
 
 # About ASCENDING
