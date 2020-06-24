@@ -7,6 +7,7 @@
 
 package com.ascending.training.repository;
 
+import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface EmployeeDao {
     Employee update(Employee employee);
     List<Employee> getEmployees();
     Employee getEmployeeByName(String name);
+
+
+//    List<Employee> getEmployeesByDepartment(Department d);
 }

@@ -167,4 +167,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return query.uniqueResult();
         }
     }
+
+//    @Override
+//    public List<Employee> getEmployeesByDepartment(Department d) {
+//        String hql = "FROM Employee as emp left join fetch emp.department as dep where dep.id=:Id";
+//        return null;
+//    }
 }
