@@ -38,6 +38,7 @@ public class DepartmentController {
         return departments;
     }
 
+    //departments/1?name=HR1
     @RequestMapping(value = "/{id}", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Department updateDepartmentName(@PathVariable("id") Long Id, @RequestParam("name") String name) {
         logger.info("pass in variable id: "+Id.toString()+"name: "+name);

@@ -1,4 +1,4 @@
-package com.ascending.training.init;
+package com.ascending.training.config;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
