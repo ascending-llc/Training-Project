@@ -10,9 +10,9 @@ package com.ascending.training.repository;
 import com.ascending.training.init.AppInitializer;
 import com.ascending.training.model.Department;
 import com.ascending.training.model.Employee;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,12 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Set;
+
+import static org.junit.Assert.*;
+
 //import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes= AppInitializer.class)
@@ -89,9 +89,21 @@ public class DepartmentDaoTest {
 //        Set<Employee> employeeSet = result.getEmployees();
 //        assertEquals(employeeSet.size(),2);
 //    }
+    @Test
+    public void simulateLazyLoadTest() throws JsonProcessingException {
+        List<Department> departments = departmentDao.getDepartments();
+        ObjectMapper mapper = new ObjectMapper();
+//        Hibernate5Module hibernate5Module = new Hibernate5Module();
+//        mapper.registerModule(hibernate5Module);
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(departments));
+//        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter(mapper);
+//        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+//        messageConverter.write(departments,MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+//        System.out.println(mockHttpOutputMessage.getBody());
+    }
 
     @Test
-    public void getDepartmentsTest() {
+    public void getDepartmentsTest() throws IOException {
         List<Department> departments = departmentDao.getDepartments();
         int expectedNumOfDept = 1;
 

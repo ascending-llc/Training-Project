@@ -47,7 +47,7 @@ public class Department {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JsonIgnore
+//    @JsonIgnore
     private Set<Employee> employees;
 
     public long getId() {
