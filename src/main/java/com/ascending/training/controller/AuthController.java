@@ -14,10 +14,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -33,11 +30,20 @@ public class AuthController {
     private String tokenKeyWord = "Authorization";
     private String tokenType = "Bearer";
 
+    //1.validate user exist in database and verify the password
+    //2.generate JWToken
+    //3.return token
 //    @RequestMapping(value = "",method = RequestMethod.POST)
 //    public String authentication(@RequestBody User user){
-//        String token;
-//        token = JwtUtil.generateToken(user);
-//        return token;
+//        logger.debug("username is "+ user.getEmail()+ "password is "+ user.getPassword());
+//        try {
+//            User u = userService.getUserByCredentials(user.getEmail(), user.getPassword());
+//            String token = jwtService.generateToken(u);
+//            return token;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
 //    }
 
     //assignment {"token": "<token>"}

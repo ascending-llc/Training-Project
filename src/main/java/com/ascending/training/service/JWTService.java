@@ -17,6 +17,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JWTService {
@@ -34,31 +35,33 @@ public class JWTService {
 
         Claims claims = Jwts.claims();
         claims.setId(String.valueOf(user.getId()));
+        claims.setSubject(user.getName());
         claims.setIssuedAt(new Date(System.currentTimeMillis()));
         claims.setIssuer(ISSUER);
         claims.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
-
+//
         List<Role> roles = user.getRoles();
         String allowedReadResources = "";
         String allowedCreateResources = "";
         String allowedUpdateResources = "";
         String allowedDeleteResources = "";
-
-        //String allowedResource = roles.stream().map(role -> role.getAllowedResource()).collect(Collectors.joining(","));
-        //claims.put("allowedResource", allowedResource);
-
-        for (Role role : roles) {
-            if (role.isAllowedRead()) allowedReadResources = String.join(role.getAllowedResource(), allowedReadResources, ",");
-            if (role.isAllowedCreate()) allowedCreateResources = String.join(role.getAllowedResource(), allowedCreateResources, ",");
-            if (role.isAllowedUpdate()) allowedUpdateResources = String.join(role.getAllowedResource(), allowedUpdateResources, ",");
-            if (role.isAllowedDelete()) allowedDeleteResources = String.join(role.getAllowedResource(), allowedDeleteResources, ",");
-        }
-
-        claims.put("allowedReadResources", allowedReadResources.replaceAll(".$", ""));
-        claims.put("allowedCreateResources", allowedCreateResources.replaceAll(".$", ""));
-        claims.put("allowedUpdateResources", allowedUpdateResources.replaceAll(".$", ""));
-        claims.put("allowedDeleteResources", allowedDeleteResources.replaceAll(".$", ""));
 //
+        String allowedResource = roles.stream().map(role -> role.getAllowedResource()).collect(Collectors.joining(","));
+//        claims.put("allowedResource", allowedResource);
+//        String allowedReadResources = roles.stream().filter(r->r.isAllowedRead()).map(r1->r1.getAllowedResource()).collect(Collectors.joining(","));
+//
+        for (Role role : roles) {
+            if (role.isAllowedRead()) allowedReadResources = allowedResource;
+            if (role.isAllowedCreate()) allowedCreateResources = allowedResource;
+            if (role.isAllowedUpdate()) allowedUpdateResources = allowedResource;
+            if (role.isAllowedDelete()) allowedDeleteResources = allowedResource;
+        }
+//
+        claims.put("allowedReadResources", allowedReadResources.replaceAll(",$", ""));
+        claims.put("allowedCreateResources", allowedCreateResources.replaceAll(",$", ""));
+        claims.put("allowedUpdateResources", allowedUpdateResources.replaceAll(",$", ""));
+        claims.put("allowedDeleteResources", allowedDeleteResources.replaceAll(",$", ""));
+
 //        //Set the JWT Claims
         JwtBuilder builder = Jwts.builder().setClaims(claims).signWith(signatureAlgorithm, signingKey);
 
