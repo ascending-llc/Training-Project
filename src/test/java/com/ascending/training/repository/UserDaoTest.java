@@ -87,9 +87,9 @@ public class UserDaoTest {
         assertTrue(user.getId()>0);
         User result = userDao.getUserById(user.getId());
         Assert.assertEquals(result.getRoles().size(),2);
-        roles.add(roleDao.getRoleByName("Admin"));
-        user.setRoles(roles);
-        userDao.save(user);
+        userDao.addRole(user, roleDao.getRoleByName("Admin"));
+//        user.setRoles(roles);
+//        userDao.save(user);
         result = userDao.getUserById(user.getId());
         Assert.assertEquals(result.getRoles().size(),3);
     }

@@ -95,14 +95,16 @@ public class UserDaoImpl implements UserDao {
     public User addRole(User user, Role role) {
         List<Role> roleSet;
         Session s = HibernateUtil.getSessionFactory().openSession();
-
+        Transaction transaction = s.beginTransaction();
         try {
             roleSet = user.getRoles();
             roleSet.add(role);
             user.setRoles(roleSet);
-            s.save(user);
+            s.saveOrUpdate(user);
+            transaction.commit();
         } catch (HibernateException e) {
             logger.error("session exception, try again");
+            transaction.rollback();
         } finally {
             s.close();
         }
