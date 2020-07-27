@@ -7,33 +7,41 @@
 
 package com.ascending.training.repository;
 
+import com.ascending.training.model.Role;
 import com.ascending.training.model.User;
 import com.ascending.training.util.HibernateUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Set;
+
 @Repository
 public class UserDaoImpl implements UserDao {
-    @Autowired private Logger logger;
+    private Logger logger=LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean save(User user) {
         Transaction transaction = null;
         boolean isSuccess = true;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
             transaction = session.beginTransaction();
-            session.persist(user);
+            session.saveOrUpdate(user);
             transaction.commit();
         }
         catch (Exception e) {
             isSuccess = false;
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("error saving record",e);
+        }finally {
+            session.close();
         }
 
         if (isSuccess) logger.debug(String.format("The user %s was inserted into the table.", user.toString()));
@@ -79,6 +87,41 @@ public class UserDaoImpl implements UserDao {
         }
         catch (Exception e){
             throw new Exception("can't find user record or session");
+        }
+    }
+
+
+    @Override
+    public User addRole(User user, Role role) {
+        List<Role> roleSet;
+        Session s = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            roleSet = user.getRoles();
+            roleSet.add(role);
+            user.setRoles(roleSet);
+            s.save(user);
+        } catch (HibernateException e) {
+            logger.error("session exception, try again");
+        } finally {
+            s.close();
+        }
+        return user;
+    }
+    @Override
+    public void delete(User user) {
+        String hql = "DELETE FROM User as u where u.id=:Id";
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            Query<User> query = session.createQuery(hql);
+            query.setParameter("Id", user.getId());
+            query.executeUpdate();
+            transaction.commit();
+        }catch (HibernateException he){
+            logger.error("error",he);
+        } finally{
+            session.close();
         }
     }
 }
